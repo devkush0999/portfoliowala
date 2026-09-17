@@ -5,7 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/jsonld";
 import { getAllEducation, getAllExperience } from "@/lib/cms/content";
 
-export const revalidate = 60;
+export const dynamic = "force-static";
 
 export const metadata = pageMetadata({
   title: "About",

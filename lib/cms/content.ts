@@ -20,7 +20,7 @@ import {
 } from "@/lib/posts";
 import type { CategorySlug } from "@/lib/site";
 import { topicClusters } from "@/lib/site";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 
 export async function getCmsPosts() {
   try {
@@ -77,15 +77,23 @@ export async function getAllProjects() {
   return remote && remote.length > 0 ? remote : seedProjects;
 }
 
-export async function getAllExperience() {
-  const remote = await readExperience();
-  return remote && remote.length > 0 ? remote : seedExperience;
-}
+export const getAllExperience = unstable_cache(
+  async () => {
+    const remote = await readExperience();
+    return remote && remote.length > 0 ? remote : seedExperience;
+  },
+  ["cms-experience"],
+  { tags: ["cms-experience"] },
+);
 
-export async function getAllEducation() {
-  const remote = await readEducation();
-  return remote && remote.length > 0 ? remote : seedEducation;
-}
+export const getAllEducation = unstable_cache(
+  async () => {
+    const remote = await readEducation();
+    return remote && remote.length > 0 ? remote : seedEducation;
+  },
+  ["cms-education"],
+  { tags: ["cms-education"] },
+);
 
 export function asCmsPost(post: Post): CmsPost {
   return {
@@ -105,6 +113,8 @@ export function asCmsPost(post: Post): CmsPost {
 }
 
 export function revalidateCms() {
+  revalidateTag("cms-experience", "max");
+  revalidateTag("cms-education", "max");
   revalidatePath("/");
   revalidatePath("/blog");
   revalidatePath("/blog/[slug]", "page");

@@ -1,20 +1,16 @@
 import Link from "next/link";
 import { Container } from "@/components/ui";
-import { getAllEducation, getAllExperience, getAllPosts, getAllProjects } from "@/lib/cms/content";
+import { getAllPosts, getAllProjects } from "@/lib/cms/content";
 
 export default async function AdminHomePage() {
-  const [posts, projects, experience, education] = await Promise.all([
+  const [posts, projects] = await Promise.all([
     getAllPosts(),
     getAllProjects(),
-    getAllExperience(),
-    getAllEducation(),
   ]);
 
   const cards = [
     { href: "/admin/posts", label: "Posts", count: posts.length },
     { href: "/admin/projects", label: "Projects", count: projects.length },
-    { href: "/admin/experience", label: "Experience", count: experience.length },
-    { href: "/admin/education", label: "Education", count: education.length },
   ];
 
   return (
@@ -24,7 +20,7 @@ export default async function AdminHomePage() {
         Write a post, upload images to Cloudinary, and add projects. Changes
         show on the public site after save.
       </p>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2">
         {cards.map((card) => (
           <Link
             key={card.href}

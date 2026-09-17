@@ -7,8 +7,6 @@ const links = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/posts", label: "Posts" },
   { href: "/admin/projects", label: "Projects" },
-  { href: "/admin/experience", label: "Experience" },
-  { href: "/admin/education", label: "Education" },
 ];
 
 export function AdminHeader() {
