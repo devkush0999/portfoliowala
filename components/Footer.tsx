@@ -9,8 +9,9 @@ export function Footer() {
         <div className="lg:col-span-2">
           <p className="font-display text-2xl text-ink">{site.name}</p>
           <p className="mt-3 max-w-md text-base leading-7 text-ink/80">
-            React Native, AI, backend, ESG, sustainability, and contextual
-            intelligence. Written from production work, not tutorial recaps.
+            React Native, TypeScript, AI, backend, carbon emissions, ESG,
+            sustainability, and contextual intelligence. Written from production
+            work, not tutorial recaps.
           </p>
         </div>
         <div>

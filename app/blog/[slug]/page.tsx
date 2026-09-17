@@ -91,7 +91,9 @@ export default async function BlogPostPage({
             {post.description}
           </p>
           <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted">
-            <span>{site.name}</span>
+            <Link href="/about" rel="author" className="hover:text-accent">
+              {site.name}
+            </Link>
             <time dateTime={post.date}>{formatDate(post.date)}</time>
             {post.updated && post.updated !== post.date ? (
               <span>Updated {formatDate(post.updated)}</span>
@@ -101,9 +103,21 @@ export default async function BlogPostPage({
           {post.cover ? (
             <img
               src={post.cover}
-              alt=""
+              alt={post.title}
               className="mt-8 w-full rounded-md border border-line object-cover"
             />
+          ) : null}
+          {post.tags.length > 0 ? (
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <li
+                  key={tag}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs text-ink"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
           ) : null}
         </div>
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,68ch)_220px]">

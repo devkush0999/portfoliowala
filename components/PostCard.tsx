@@ -5,9 +5,11 @@ import { getCategory } from "@/lib/posts";
 export function PostCard({
   post,
   featured = false,
+  heading: Heading = "h3",
 }: {
   post: Post;
   featured?: boolean;
+  heading?: "h2" | "h3";
 }) {
   const category = getCategory(post.category);
 
@@ -22,19 +24,19 @@ export function PostCard({
         {post.cover ? (
           <img
             src={post.cover}
-            alt=""
+            alt={post.title}
             className={`mt-4 w-full rounded-md border border-line object-cover ${
               featured ? "h-56" : "h-40"
             }`}
           />
         ) : null}
-        <h3
+        <Heading
           className={`mt-3 font-display tracking-tight text-ink transition group-hover:text-accent ${
             featured ? "text-3xl sm:text-4xl" : "text-2xl"
           }`}
         >
           {post.title}
-        </h3>
+        </Heading>
         <p className="mt-3 max-w-2xl text-base leading-7 text-ink/80">
           {post.description}
         </p>
@@ -43,17 +45,25 @@ export function PostCard({
   );
 }
 
-export function PostList({ posts }: { posts: Post[] }) {
+export function PostList({
+  posts,
+  heading = "h2",
+}: {
+  posts: Post[];
+  heading?: "h2" | "h3";
+}) {
   if (posts.length === 0) {
     return (
       <p className="text-base text-ink/80">No writing in this category yet.</p>
     );
   }
 
+  const Heading = heading;
+
   return (
     <div className="grid gap-10">
       {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
+        <PostCard key={post.slug} post={post} heading={Heading} />
       ))}
     </div>
   );

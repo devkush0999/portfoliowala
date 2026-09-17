@@ -1,23 +1,26 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/cms/content";
-import { categories, site } from "@/lib/site";
+import { categories, site, topicClusters } from "@/lib/site";
 
 export const revalidate = 60;
+
+const climate = new Set(topicClusters.climate);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const posts = (await getAllPosts()).map((post) => ({
     url: `${site.url}/blog/${post.slug}`,
     lastModified: new Date(post.updated ?? post.date),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
+    changeFrequency: "weekly" as const,
+    priority: climate.has(post.category) ? 0.9 : 0.8,
+    images: post.cover ? [post.cover] : undefined,
   }));
 
   const categoryPages = categories.map((category) => ({
     url: `${site.url}/blog/category/${category.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
-    priority: 0.7,
+    priority: climate.has(category.slug) ? 0.85 : 0.7,
   }));
 
   return [
@@ -42,8 +45,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${site.url}/blog`,
       lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
+      changeFrequency: "daily",
+      priority: 0.95,
     },
     {
       url: `${site.url}/contact`,

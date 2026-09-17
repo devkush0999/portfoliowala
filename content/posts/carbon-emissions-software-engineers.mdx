@@ -1,0 +1,59 @@
+---
+title: Carbon emissions software engineers actually need to understand
+description: Scope 1, 2, and 3, GHG Protocol, and why carbon accounting is a data product problem. Written for engineers building climate software.
+date: 2026-09-17
+category: carbon
+tags:
+  - Carbon emissions
+  - GHG Protocol
+  - Scope 1 2 3
+  - Carbon accounting
+featured: true
+faq:
+  - question: What are Scope 1, 2, and 3 emissions?
+    answer: Scope 1 is direct emissions you own or control. Scope 2 is purchased electricity, heat, and steam. Scope 3 is the rest of the value chain, from purchased goods to product use.
+  - question: What is the GHG Protocol?
+    answer: The Greenhouse Gas Protocol is the most widely used standard for measuring and reporting greenhouse gas emissions. Most carbon software maps operational data onto its categories.
+  - question: Why should software engineers care about carbon accounting?
+    answer: Carbon numbers are calculated from activity data, emission factors, and methodology versions. That is a data pipeline with audit trails, not a PDF export.
+---
+
+Carbon emissions are not a dashboard colour. They are activity data multiplied by emission factors, classified into scopes, and frozen for a reporting period. If you are building climate, ESG, or sustainability software, that pipeline is the product.
+
+This is the canonical note I will keep pointing back to as I write about [sustainability products](/blog/sustainability-products-for-mobile-engineers) and [ESG reporting](/blog/esg-reporting-is-a-product-problem).
+
+## What carbon accounting actually measures
+
+An organisation's greenhouse gas inventory answers: how much CO2-equivalent did we emit, from what, in this period, using which method?
+
+The unit is usually tCO2e. The method is usually the [GHG Protocol](https://ghgprotocol.org/). The fight is never the unit. The fight is evidence: meters, invoices, fuel logs, supplier data, and a factor set you can defend.
+
+## Scope 1, 2, and 3 without the slide deck
+
+**Scope 1** is fuel you burn and processes you run. Boilers, fleet, refrigerants, on-site generation.
+
+**Scope 2** is energy you buy. Grid electricity dominates. Location-based and market-based methods can disagree. The product has to show which one you used.
+
+**Scope 3** is everything else in the value chain. Purchased goods, transport, waste, business travel, use of sold products. It is larger, messier, and where most inventories stall.
+
+Engineers treat Scope 3 like a single API. It is not. Each category has different collectors, latency, and confidence.
+
+## Emission factors are versioned data
+
+A litre of diesel is not a carbon number until you apply a factor. Factors change by region, year, fuel mix, and publisher. Hide the factor and the number is not auditable. Store factor ID, vintage, source, and the activity record it attached to.
+
+That is closer to accounting software than to a CMS. Same lesson as [ESG reporting as a product problem](/blog/esg-reporting-is-a-product-problem).
+
+## What a carbon product has to do
+
+- Ingest activity data from meters, ERPs, invoices, and phones in the field
+- Keep units explicit and conversions logged
+- Map data to GHG categories without duplicating the source of truth
+- Freeze a reporting period so last week's edit does not silently rewrite last year's inventory
+- Show uncertainty instead of fake precision
+
+Mobile still matters here. Plants and sites are where activity happens. A React Native form that captures a meter photo and a reading on a bad network is carbon infrastructure.
+
+## How this site will cover carbon
+
+I will keep writing from the intersection of production software and climate operations: inventories, factors, Scope 3 collection, and the UX that makes a number defensible. Start with the [carbon category](/blog/category/carbon) and the [sustainability](/blog/category/sustainability) notes.

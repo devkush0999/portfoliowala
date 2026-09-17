@@ -4,8 +4,8 @@ import { CategoryPills } from "@/components/CategoryPills";
 import { JsonLd } from "@/components/JsonLd";
 import { PostList } from "@/components/PostCard";
 import { Container, SectionHeading } from "@/components/ui";
-import { breadcrumbJsonLd } from "@/lib/jsonld";
-import { getPostsByCategory } from "@/lib/cms/content";
+import { breadcrumbJsonLd, collectionJsonLd } from "@/lib/jsonld";
+import { getClusterPosts, getPostsByCategory } from "@/lib/cms/content";
 import { getCategory } from "@/lib/posts";
 import { pageMetadata } from "@/lib/seo";
 import { categories } from "@/lib/site";
@@ -28,10 +28,14 @@ export async function generateMetadata({
   }
 
   return pageMetadata({
-    title: `${category.label} writing`,
-    description: `${category.description} Writing by Devesh Kumar Singh.`,
+    title: `${category.label} writing by Devesh Kumar Singh`,
+    description: `${category.description} Essays and production notes by Devesh Kumar Singh.`,
     path: `/blog/category/${category.slug}`,
-    keywords: [category.label, `Devesh Kumar Singh ${category.label}`],
+    keywords: [
+      category.label,
+      `${category.label} blog`,
+      `Devesh Kumar Singh ${category.label}`,
+    ],
   });
 }
 
@@ -48,9 +52,18 @@ export default async function CategoryPage({
   }
 
   const posts = await getPostsByCategory(category.slug);
+  const cluster = posts.length === 0 ? await getClusterPosts(category.slug) : [];
 
   return (
     <>
+      <JsonLd
+        data={collectionJsonLd({
+          name: category.label,
+          description: category.description,
+          path: `/blog/category/${category.slug}`,
+          posts: posts.length > 0 ? posts : cluster,
+        })}
+      />
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
@@ -60,6 +73,7 @@ export default async function CategoryPage({
       />
       <Container className="py-16">
         <SectionHeading
+          as="h1"
           eyebrow="Category"
           title={category.label}
           description={category.description}
@@ -68,7 +82,19 @@ export default async function CategoryPage({
           <CategoryPills active={category.slug} />
         </div>
         <div className="mt-12">
-          <PostList posts={posts} />
+          {posts.length > 0 ? (
+            <PostList posts={posts} />
+          ) : (
+            <>
+              <p className="text-base text-ink/80">
+                No {category.label.toLowerCase()} essays yet. Related writing from
+                the same cluster is below.
+              </p>
+              <div className="mt-10">
+                <PostList posts={cluster} />
+              </div>
+            </>
+          )}
         </div>
       </Container>
     </>

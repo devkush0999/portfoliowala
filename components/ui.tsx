@@ -18,10 +18,12 @@ export function SectionHeading({
   eyebrow,
   title,
   description,
+  as: Tag = "h2",
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
+  as?: "h1" | "h2";
 }) {
   return (
     <div className="max-w-2xl">
@@ -30,9 +32,9 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="mt-3 font-display text-3xl tracking-tight text-ink sm:text-4xl">
+      <Tag className="mt-3 font-display text-3xl tracking-tight text-ink sm:text-4xl">
         {title}
-      </h2>
+      </Tag>
       {description ? (
         <p className="mt-4 text-base leading-7 text-ink/80">{description}</p>
       ) : null}

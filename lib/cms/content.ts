@@ -19,6 +19,7 @@ import {
   type Post,
 } from "@/lib/posts";
 import type { CategorySlug } from "@/lib/site";
+import { topicClusters } from "@/lib/site";
 import { revalidatePath } from "next/cache";
 
 export async function getCmsPosts() {
@@ -59,6 +60,16 @@ export async function getPostsByCategory(category: CategorySlug) {
 
 export async function getRelatedPosts(post: Post) {
   return getRelatedPostsFrom(await getAllPosts(), post);
+}
+
+export async function getClusterPosts(category: CategorySlug) {
+  const cluster =
+    Object.values(topicClusters).find((group) => group.includes(category)) ??
+    [];
+  const posts = await getAllPosts();
+  return posts.filter(
+    (post) => post.category !== category && cluster.includes(post.category),
+  );
 }
 
 export async function getAllProjects() {
