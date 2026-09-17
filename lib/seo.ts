@@ -4,7 +4,8 @@ import type { Post } from "@/lib/posts";
 import { getCategory } from "@/lib/posts";
 
 export function absoluteUrl(path = "/") {
-  return new URL(path, site.url).toString();
+  const base = site.url || "https://deveshkumarsingh.com";
+  return new URL(path, base).toString();
 }
 
 const defaultImage = {

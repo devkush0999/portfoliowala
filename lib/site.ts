@@ -1,8 +1,26 @@
+const FALLBACK_SITE_URL = "https://deveshkumarsingh.com";
+
+function resolveSiteUrl() {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit) {
+    return explicit.replace(/\/$/, "");
+  }
+  const production = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (production) {
+    return `https://${production.replace(/\/$/, "")}`;
+  }
+  const preview = process.env.VERCEL_URL?.trim();
+  if (preview) {
+    return `https://${preview.replace(/\/$/, "")}`;
+  }
+  return FALLBACK_SITE_URL;
+}
+
 export const site = {
   name: "Devesh Kumar Singh",
   shortName: "Devesh Singh",
   handle: "deveshkumarsingh",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://deveshkumarsingh.com",
+  url: resolveSiteUrl(),
   title:
     "Devesh Kumar Singh | React Native, Mobile Apps, ESG & Sustainability",
   description:
