@@ -3,7 +3,7 @@ import {
   readExperience,
   readPosts,
   readProjects,
-} from "@/lib/cms/cloudinary";
+} from "@/lib/cms/store";
 import {
   seedEducation,
   seedExperience,

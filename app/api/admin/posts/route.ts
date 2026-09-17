@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readPosts, writePosts } from "@/lib/cms/cloudinary";
+import { insertPost, readPosts } from "@/lib/cms/store";
 import { asCmsPost, getAllPosts, revalidateCms } from "@/lib/cms/content";
 import type { CmsPost } from "@/lib/cms/types";
 
@@ -19,15 +19,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
   }
 
-  const next = [
-    ...posts,
-    {
-      ...body,
-      date: body.date || new Date().toISOString().slice(0, 10),
-      tags: body.tags ?? [],
-    },
-  ];
-  await writePosts(next);
+  await insertPost({
+    ...body,
+    date: body.date || new Date().toISOString().slice(0, 10),
+    tags: body.tags ?? [],
+  });
   revalidateCms();
   return NextResponse.json({ ok: true });
 }

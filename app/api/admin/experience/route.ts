@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readExperience, writeExperience } from "@/lib/cms/cloudinary";
+import { readExperience, writeExperience } from "@/lib/cms/store";
 import { revalidateCms } from "@/lib/cms/content";
 import { seedExperience } from "@/lib/cms/seed";
 import type { CmsExperience } from "@/lib/cms/types";

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readProjects, writeProjects } from "@/lib/cms/cloudinary";
+import { readProjects, writeProjects } from "@/lib/cms/store";
 import { revalidateCms } from "@/lib/cms/content";
 import { seedProjects } from "@/lib/cms/seed";
 import type { CmsProject } from "@/lib/cms/types";

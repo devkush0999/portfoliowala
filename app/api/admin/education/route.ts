@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readEducation, writeEducation } from "@/lib/cms/cloudinary";
+import { readEducation, writeEducation } from "@/lib/cms/store";
 import { revalidateCms } from "@/lib/cms/content";
 import { seedEducation } from "@/lib/cms/seed";
 import type { CmsEducation } from "@/lib/cms/types";
