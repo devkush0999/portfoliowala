@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
 import type { CmsProject } from "@/lib/cms/types";
 
 function hrefFor(project: CmsProject) {
@@ -14,11 +15,15 @@ export function ProjectBanner({
 }) {
   if (project.image) {
     return (
-      <img
-        src={project.image}
-        alt={project.title}
-        className={`w-full object-cover ${className}`}
-      />
+      <div className={`relative overflow-hidden ${className}`}>
+        <ResponsiveImage
+          src={project.image}
+          alt={project.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </div>
     );
   }
 

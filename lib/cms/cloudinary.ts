@@ -29,6 +29,9 @@ export async function uploadImage(file: Buffer, filename: string) {
     {
       folder: "dks-cms/images",
       resource_type: "image",
+      transformation: [
+        { fetch_format: "auto", quality: "auto", width: 2000, crop: "limit" },
+      ],
     },
   );
   return uploaded.secure_url as string;

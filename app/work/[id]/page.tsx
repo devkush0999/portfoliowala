@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { ProjectBanner } from "@/components/ProjectCard";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
 import { Container } from "@/components/ui";
 import { getAllProjects, getProject, projectPath } from "@/lib/cms/content";
 import { breadcrumbJsonLd, projectJsonLd } from "@/lib/jsonld";
@@ -130,12 +131,18 @@ export default async function ProjectPage({
             {gallery.length > 0 ? (
               <div className="mt-12 grid gap-4 sm:grid-cols-2">
                 {gallery.map((src) => (
-                  <img
+                  <div
                     key={src}
-                    src={src}
-                    alt=""
-                    className="w-full rounded-md border border-line object-cover"
-                  />
+                    className="relative aspect-[4/3] overflow-hidden rounded-md border border-line"
+                  >
+                    <ResponsiveImage
+                      src={src}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                  </div>
                 ))}
               </div>
             ) : null}

@@ -420,13 +420,15 @@ export function PostEditor({
             </label>
             <ImageUpload
               label="Insert image into this section"
-              onChange={(url) =>
+              onChange={(url, name) =>
                 setSections(
                   sections.map((item) =>
                     item.id === section.id
                       ? {
                           ...item,
-                          body: `${item.body.trim()}\n\n![](${url})\n`,
+                          body: `${item.body.trim()}\n\n![${(name ?? "image")
+                            .replace(/\.[^.]+$/, "")
+                            .replace(/[-_]+/g, " ")}](${url})\n`,
                         }
                       : item,
                   ),

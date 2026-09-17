@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
 import { formatDate, type Post } from "@/lib/posts";
 import { getCategory } from "@/lib/posts";
 import { site } from "@/lib/site";
@@ -23,15 +24,20 @@ export function PostCard({
           <span>{post.readingTime}</span>
         </div>
         {post.cover ? (
-          <img
-            src={post.cover}
-            alt={post.title}
-            loading={featured ? "eager" : "lazy"}
-            decoding="async"
-            className={`mt-4 w-full rounded-md border border-line object-cover ${
+          <div
+            className={`relative mt-4 overflow-hidden rounded-md border border-line ${
               featured ? "h-44 sm:h-56" : "h-36 sm:h-40"
             }`}
-          />
+          >
+            <ResponsiveImage
+              src={post.cover}
+              alt={post.title}
+              fill
+              priority={featured}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 800px"
+              className="object-cover"
+            />
+          </div>
         ) : null}
         <Heading
           className={`mt-3 font-display tracking-tight text-ink transition group-hover:text-accent ${

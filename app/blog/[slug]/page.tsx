@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PostCard } from "@/components/PostCard";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
 import { JsonLd } from "@/components/JsonLd";
 import { TableOfContents } from "@/components/TableOfContents";
 import { MDXContent } from "@/components/MDXContent";
@@ -110,12 +111,16 @@ export default async function BlogPostPage({
           </header>
           {post.cover ? (
             <figure className="mx-auto mt-8 max-w-4xl">
-              <img
-                src={post.cover}
-                alt={post.title}
-                fetchPriority="high"
-                className="aspect-[16/9] w-full rounded-md border border-line object-cover"
-              />
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-md border border-line">
+                <ResponsiveImage
+                  src={post.cover}
+                  alt={post.title}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 896px"
+                  className="object-cover"
+                />
+              </div>
             </figure>
           ) : null}
           {post.tags.length > 0 ? (

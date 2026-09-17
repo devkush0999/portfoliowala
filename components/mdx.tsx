@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
 
 export const mdxComponents = {
   h2: (props: ComponentPropsWithoutRef<"h2">) => (
@@ -19,9 +20,20 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  img: (props: ComponentPropsWithoutRef<"img">) => (
-    <img className="mt-6 w-full rounded-md border border-line" {...props} />
-  ),
+  img: (props: ComponentPropsWithoutRef<"img">) => {
+    const src = typeof props.src === "string" ? props.src : "";
+    if (!src) {
+      return null;
+    }
+    return (
+      <ResponsiveImage
+        src={src}
+        alt={typeof props.alt === "string" ? props.alt : ""}
+        sizes="(max-width: 768px) 100vw, 720px"
+        className="mt-6 h-auto w-full rounded-md border border-line"
+      />
+    );
+  },
   p: (props: ComponentPropsWithoutRef<"p">) => (
     <p className="mt-6 text-base leading-7 text-ink sm:text-lg sm:leading-[1.8]" {...props} />
   ),
