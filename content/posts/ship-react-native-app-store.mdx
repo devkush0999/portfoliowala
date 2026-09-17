@@ -1,0 +1,55 @@
+---
+title: How I ship production React Native apps to the Apple App Store
+description: Devesh Kumar Singh on what actually matters when a React Native app leaves the simulator and hits App Store review, privacy rules, and real iPhones.
+date: 2026-09-10
+updated: 2026-09-10
+category: react-native
+tags:
+  - React Native
+  - App Store
+  - iOS
+  - Expo
+featured: true
+faq:
+  - question: Who is Devesh Kumar Singh in React Native?
+    answer: Devesh Kumar Singh is a React Native developer based in Gurugram who ships Android and iOS apps, including a live FinTech iOS app, Debt Relief India.
+  - question: What is the hardest part of shipping a React Native iOS app?
+    answer: App Store review, privacy manifests, permissions, and iOS-specific edge cases. The UI is rarely the last blocker.
+---
+
+Shipping a React Native app is not the same as running it on a simulator. The gap shows up in App Store review, privacy manifests, payment flows, and the iOS details that only appear on a real device.
+
+I learned this while taking a FinTech product, Debt Relief India, from a codebase to a live listing on the Apple App Store.
+
+## The work starts after the screens are done
+
+Most React Native writing stops at navigation, lists, and styling. Production work starts later:
+
+- Signing, certificates, and provisioning
+- Privacy Nutrition Labels and permission copy
+- Push notifications that actually arrive
+- Deep links that survive OS updates
+- Release tracks, crash reporting, and rollback
+
+If you cannot explain those pieces, you do not have a shipped app. You have a prototype.
+
+## Treat iOS as a first-class platform
+
+React Native is cross-platform. App Review is not. A FinTech app is judged on data collection, account deletion, encryption claims, and whether the product matches the screenshots.
+
+The practical habit is simple: keep an iOS checklist next to the feature board. Every new permission, SDK, or analytics tool is an App Store risk until proven otherwise.
+
+## Keep native modules boring
+
+The fastest way to stall a release is a native module nobody can rebuild. I prefer:
+
+- Well-maintained libraries with recent iOS support
+- A clean React Native upgrade path
+- TypeScript at the boundaries
+- Feature flags for anything that can fail in review
+
+Expo can help. A bare React Native CLI app can also ship. The stack matters less than whether you can reproduce a release build on a fresh machine.
+
+## What I write about next
+
+I will keep publishing React Native notes from production: Expo vs CLI, New Architecture, lists at scale, offline, and the unglamorous release work. If you searched for Devesh Kumar Singh React Native, this is the thread to follow.

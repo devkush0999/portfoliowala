@@ -1,0 +1,46 @@
+---
+title: What a contextual intelligence engine actually is
+description: A contextual intelligence engine does not just store ESG and operations data. It answers "what does this number mean here, now, for this business?"
+date: 2026-09-06
+category: contextual-intelligence
+tags:
+  - Contextual intelligence
+  - ESG
+  - AI
+  - Data platforms
+faq:
+  - question: What is a contextual intelligence engine?
+    answer: A contextual intelligence engine combines business context, domain rules, and data so a system can explain what a metric means for a specific company, site, or reporting period.
+  - question: How is it different from a chatbot?
+    answer: A chatbot answers in language. A contextual intelligence engine grounds answers in owned data, rules, and evidence, then uses language only as an interface.
+---
+
+A contextual intelligence engine is not a chatbot with a green theme. It is a system that can take a metric, a company, a site, a reporting period, and a regulation, then say what the number means and what to do next.
+
+That is the interesting problem in sustainability software. The data is messy. The rules change. The user is not a data scientist.
+
+## Context is the missing layer
+
+Most dashboards show Scope 1, Scope 2, maybe a Scope 3 estimate. They rarely encode:
+
+- Which methodology produced the number
+- Whether the facility is comparable to last year
+- Which framework the user is actually filing against
+- What a "good" value looks like in that industry
+
+Without that context, AI will hallucinate a confident paragraph. With it, AI can retrieve, compare, and explain.
+
+## What the engine has to know
+
+A useful engine keeps four layers close together:
+
+1. Facts: measured and calculated data
+2. Rules: GHG Protocol, BRSR mappings, emission factors
+3. Situation: company, geography, sector, reporting year
+4. Task: audit, reduction, board pack, supplier request
+
+Language models help with the task layer. They should not invent the facts.
+
+## Why I am writing this series
+
+I sit at the intersection of mobile products and sustainability systems. Contextual intelligence is how those systems become more than file storage. I will keep breaking the idea into architecture notes you can actually implement.

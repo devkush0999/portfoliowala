@@ -1,0 +1,38 @@
+---
+title: Backend design that does not break React Native apps
+description: "Mobile apps fail in the seams: pagination, auth expiry, error shape, and versioning. A backend contract that respects those seams lasts longer."
+date: 2026-09-02
+category: backend
+tags:
+  - Backend
+  - APIs
+  - React Native
+  - Auth
+faq:
+  - question: What backend mistakes break React Native apps?
+    answer: Unstable JSON shapes, silent auth expiry, unpaginated lists, and error bodies that change between environments.
+  - question: What should a mobile API look like?
+    answer: Versioned endpoints, explicit error codes, cursor pagination, and a documented auth refresh path.
+---
+
+A React Native app is only as stable as the API it trusts. Most "mobile bugs" I debug are backend contract bugs wearing a UI costume.
+
+## Freeze the response shape
+
+If a field is sometimes a string and sometimes null, the app will crash on one device and not another. TypeScript on the client does not save you if the server improvises.
+
+Publish a contract. Version it. Add fields. Do not rename them in place.
+
+## Pagination is not optional
+
+Mobile lists are infinite until they are not. Offset pagination breaks when data changes under the user. Cursor pagination is kinder. Always return a next token, even when the first page is small.
+
+## Auth needs a story, not a middleware
+
+JWT expiry, refresh tokens, and logged-out states have to be designed. The app should know whether to retry, reauthenticate, or show a hard stop. A 401 with an empty body is how you create ghost sessions.
+
+## What I use
+
+I have worked with Node, Laravel, Firebase, Supabase, and AWS-backed APIs. The stack is less important than logs, idempotency for payments, and an error format the app can switch on.
+
+This blog will keep covering the backend side of mobile: webhooks, file uploads, offline sync, and the boring reliability work.

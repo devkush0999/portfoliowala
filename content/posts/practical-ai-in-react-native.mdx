@@ -1,0 +1,41 @@
+---
+title: Practical AI in React Native, without shipping a toy chatbot
+description: How to put AI in a React Native app in a way that is useful, private, and cheap enough to survive production.
+date: 2026-09-04
+category: ai
+tags:
+  - AI
+  - React Native
+  - Mobile
+  - LLMs
+faq:
+  - question: Should a React Native app call an LLM directly from the device?
+    answer: Almost never for production. Put the model behind your backend so you can auth, meter, log, and keep keys off the client.
+  - question: Where does AI help in mobile apps?
+    answer: Classification, search, summarization of user-owned content, and assisted workflows. Open-ended chat is rarely the first useful feature.
+---
+
+AI in a React Native app is easy to demo and easy to do badly. A text box that talks to a model is not a product. A product uses a model to shorten a real task the user already has.
+
+## Keep the model off the client
+
+API keys do not belong in the app binary. The mobile client should send an authenticated request to your backend. The backend decides the prompt, the retrieval, the rate limit, and the audit log.
+
+This also lets you swap models without shipping an OTA just to change vendors.
+
+## Start with a narrow job
+
+The useful mobile jobs are boring:
+
+- Turn a long form into a structured draft
+- Search the user's own records
+- Classify a photo or a document
+- Summarize a thread the user already owns
+
+If the feature needs world knowledge, it is probably a web product. If it needs the user's data, it can be a mobile feature.
+
+## Latency and cost are product constraints
+
+Mobile users will not wait four seconds for a spinner. Stream when you can. Cache when the question is repeated. Fail closed when the model is down so the rest of the app still works.
+
+I will write follow-ups on on-device models, RAG for mobile, and how sustainability products can use AI without inventing numbers.

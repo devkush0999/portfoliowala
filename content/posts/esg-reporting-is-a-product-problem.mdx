@@ -1,0 +1,41 @@
+---
+title: ESG reporting is a product problem, not a PDF problem
+description: ESG software fails when it treats BRSR, GRI, and carbon data as documents. Devesh Kumar Singh on what engineering teams actually have to build.
+date: 2026-09-08
+category: esg
+tags:
+  - ESG
+  - BRSR
+  - Sustainability software
+  - Data
+faq:
+  - question: What does ESG mean for software teams?
+    answer: ESG software has to collect, validate, and explain environmental, social, and governance data across frameworks such as GRI, SASB, TCFD, CDP, and India's BRSR.
+  - question: Why do ESG reports break?
+    answer: They break when data lives in spreadsheets, ownership is unclear, and the product cannot show evidence for a number when an auditor asks.
+---
+
+ESG reporting looks like a document. It is not. A usable ESG product is a data system with audit trails, ownership, and numbers that can survive a reviewer asking "where did this come from?"
+
+I work at GreensTurn, where ESG and decarbonization are the business, not a slide in a pitch deck. That changes how you think about software.
+
+## Frameworks are the interface, not the database
+
+GRI, SASB, TCFD, CDP, and India's BRSR are reporting interfaces. They ask for different cuts of the same operational truth: energy, emissions, water, waste, people, governance, supply chain.
+
+If you model the product as "one form per framework", you duplicate work and drift. If you model the operational data once, then map it to frameworks, you can actually keep the report current.
+
+## Evidence beats a prettier dashboard
+
+An ESG number without evidence is a liability. Engineering needs:
+
+- Source files and calculation versions
+- Who entered the value and when
+- Unit conversions that are explicit
+- A way to freeze a reporting period
+
+This is closer to accounting software than to a marketing site.
+
+## What I will cover here
+
+I will write about BRSR, GHG inventories, and the product decisions that make ESG data trustworthy. If you are an engineer dropped into sustainability work, start by refusing to treat the report as the source of truth.
