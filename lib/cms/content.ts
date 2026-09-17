@@ -33,7 +33,7 @@ export async function getCmsPosts() {
   }
 }
 
-async function getMergedPosts(): Promise<Post[]> {
+async function mergePosts(): Promise<Post[]> {
   const local = getLocalPosts();
   const remote = await getCmsPosts();
   const bySlug = new Map<string, Post>();
@@ -52,15 +52,19 @@ async function getMergedPosts(): Promise<Post[]> {
 }
 
 export async function getAdminPosts(): Promise<Post[]> {
-  return getMergedPosts();
+  return mergePosts();
 }
 
-export async function getAllPosts(): Promise<Post[]> {
-  const posts = await getMergedPosts();
-  return posts.filter(
-    (post) => !(post.draft && process.env.NODE_ENV === "production"),
-  );
-}
+export const getAllPosts = unstable_cache(
+  async () => {
+    const posts = await mergePosts();
+    return posts.filter(
+      (post) => !(post.draft && process.env.NODE_ENV === "production"),
+    );
+  },
+  ["cms-posts-public"],
+  { revalidate: 60, tags: ["cms-posts"] },
+);
 
 export async function getPost(slug: string) {
   return getPostFrom(await getAllPosts(), slug);
@@ -84,15 +88,19 @@ export async function getClusterPosts(category: CategorySlug) {
   );
 }
 
-export async function getAllProjects() {
-  try {
-    const remote = await readProjects();
-    const data = remote && remote.length > 0 ? remote : seedProjects;
-    return data.map(hydrateProject);
-  } catch {
-    return seedProjects.map(hydrateProject);
-  }
-}
+export const getAllProjects = unstable_cache(
+  async () => {
+    try {
+      const remote = await readProjects();
+      const data = remote && remote.length > 0 ? remote : seedProjects;
+      return data.map(hydrateProject);
+    } catch {
+      return seedProjects.map(hydrateProject);
+    }
+  },
+  ["cms-projects"],
+  { revalidate: 60, tags: ["cms-projects"] },
+);
 
 export async function getProject(slug: string) {
   const projects = await getAllProjects();
@@ -225,6 +233,8 @@ export function asCmsPost(post: Post): CmsPost {
 export function revalidateCms() {
   revalidateTag("cms-experience", "max");
   revalidateTag("cms-education", "max");
+  revalidateTag("cms-posts", "max");
+  revalidateTag("cms-projects", "max");
   revalidatePath("/");
   revalidatePath("/blog");
   revalidatePath("/blog/[slug]", "page");

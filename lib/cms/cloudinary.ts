@@ -11,28 +11,24 @@ function configured() {
   return true;
 }
 
-export async function uploadImage(file: Buffer, filename: string) {
+export async function uploadImage(file: Buffer) {
   if (!configured()) {
     throw new Error("Cloudinary is not configured");
   }
-  const ext = filename.split(".").pop()?.toLowerCase() ?? "jpg";
-  const mime =
-    ext === "png"
-      ? "image/png"
-      : ext === "webp"
-        ? "image/webp"
-        : ext === "gif"
-          ? "image/gif"
-          : "image/jpeg";
-  const uploaded = await cloudinary.uploader.upload(
-    `data:${mime};base64,${file.toString("base64")}`,
-    {
-      folder: "dks-cms/images",
-      resource_type: "image",
-      transformation: [
-        { fetch_format: "auto", quality: "auto", width: 2000, crop: "limit" },
-      ],
-    },
-  );
-  return uploaded.secure_url as string;
+  return new Promise<string>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "dks-cms/images",
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error || !result?.secure_url) {
+          reject(error ?? new Error("Upload failed"));
+          return;
+        }
+        resolve(result.secure_url);
+      },
+    );
+    stream.end(file);
+  });
 }

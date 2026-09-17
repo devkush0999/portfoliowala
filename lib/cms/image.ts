@@ -1,10 +1,8 @@
-import type { ImageLoader } from "next/image";
-
 export function isCloudinaryUrl(src: string) {
   return src.includes("res.cloudinary.com") && src.includes("/image/upload/");
 }
 
-export const cloudinaryLoader: ImageLoader = ({ src, width, quality }) => {
+export function cmsSrc(src: string, width: number) {
   const marker = "/image/upload/";
   const index = src.indexOf(marker);
   if (index === -1) {
@@ -16,8 +14,9 @@ export const cloudinaryLoader: ImageLoader = ({ src, width, quality }) => {
     const version = path.search(/\/v\d+\//);
     if (version >= 0) {
       path = path.slice(version + 1);
+    } else {
+      path = path.replace(/^[^/]+\/(?=v\d+\/|[\w-]+\/)/, "");
     }
   }
-  const q = quality ?? 75;
-  return `${prefix}f_auto,q_${q},c_limit,w_${width}/${path}`;
-};
+  return `${prefix}f_auto,q_auto,c_limit,w_${width}/${path}`;
+}

@@ -107,13 +107,6 @@ export async function readPosts() {
 
   const migrated = await cloudinaryJson<CmsPost[]>("dks-cms/posts");
   if (migrated && migrated.length > 0) {
-    try {
-      await writePosts(migrated);
-    } catch (error) {
-      if (!missingTable(error)) {
-        throw error;
-      }
-    }
     return migrated;
   }
 
@@ -205,16 +198,7 @@ export async function readProjects() {
   }
 
   const migrated = await cloudinaryJson<CmsProject[]>("dks-cms/projects");
-  const data =
-    migrated && migrated.length > 0 ? migrated : seedProjects;
-  try {
-    await writeProjects(data);
-  } catch (error) {
-    if (!missingTable(error)) {
-      throw error;
-    }
-  }
-  return data;
+  return migrated && migrated.length > 0 ? migrated : seedProjects;
 }
 
 export async function writeProjects(items: CmsProject[]) {
@@ -270,16 +254,7 @@ export async function readExperience() {
   }
 
   const migrated = await cloudinaryJson<CmsExperience[]>("dks-cms/experience");
-  const data =
-    migrated && migrated.length > 0 ? migrated : seedExperience;
-  try {
-    await writeExperience(data);
-  } catch (error) {
-    if (!missingTable(error)) {
-      throw error;
-    }
-  }
-  return data;
+  return migrated && migrated.length > 0 ? migrated : seedExperience;
 }
 
 export async function writeExperience(items: CmsExperience[]) {
@@ -324,16 +299,7 @@ export async function readEducation() {
   }
 
   const migrated = await cloudinaryJson<CmsEducation[]>("dks-cms/education");
-  const data =
-    migrated && migrated.length > 0 ? migrated : seedEducation;
-  try {
-    await writeEducation(data);
-  } catch (error) {
-    if (!missingTable(error)) {
-      throw error;
-    }
-  }
-  return data;
+  return migrated && migrated.length > 0 ? migrated : seedEducation;
 }
 
 export async function writeEducation(items: CmsEducation[]) {
