@@ -18,6 +18,18 @@ import type {
   CmsProject,
 } from "@/lib/cms/types";
 
+function missingTable(error: unknown) {
+  const parts = [error];
+  if (error && typeof error === "object" && "cause" in error) {
+    parts.push((error as { cause?: unknown }).cause);
+  }
+  return parts.some((part) =>
+    /no such table/i.test(
+      part instanceof Error ? part.message : String(part ?? ""),
+    ),
+  );
+}
+
 async function cloudinaryJson<T>(publicId: string): Promise<T | null> {
   const cloud = process.env.CLOUDINARY_CLOUD_NAME;
   if (!cloud) {
@@ -82,14 +94,26 @@ function fromPostRow(row: typeof postsTable.$inferSelect): CmsPost {
 }
 
 export async function readPosts() {
-  const rows = await db.select().from(postsTable);
-  if (rows.length > 0) {
-    return rows.map(fromPostRow);
+  try {
+    const rows = await db.select().from(postsTable);
+    if (rows.length > 0) {
+      return rows.map(fromPostRow);
+    }
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
   }
 
   const migrated = await cloudinaryJson<CmsPost[]>("dks-cms/posts");
   if (migrated && migrated.length > 0) {
-    await writePosts(migrated);
+    try {
+      await writePosts(migrated);
+    } catch (error) {
+      if (!missingTable(error)) {
+        throw error;
+      }
+    }
     return migrated;
   }
 
@@ -148,36 +172,48 @@ export async function deletePost(slug: string) {
 }
 
 export async function readProjects() {
-  const rows = await db
-    .select()
-    .from(projectsTable)
-    .orderBy(projectsTable.position);
-  if (rows.length > 0) {
-    return rows.map((row) => ({
-      id: row.id,
-      title: row.title,
-      year: row.year,
-      role: row.role,
-      summary: row.summary,
-      tags: row.tags ?? [],
-      image: row.image ?? undefined,
-      href: row.href ?? undefined,
-      github: row.github ?? undefined,
-      slug: row.slug ?? undefined,
-      description: row.description ?? undefined,
-      problem: row.problem ?? undefined,
-      outcome: row.outcome ?? undefined,
-      features: row.features ?? [],
-      images: row.images ?? [],
-      appStore: row.appStore ?? undefined,
-      playStore: row.playStore ?? undefined,
-    }));
+  try {
+    const rows = await db
+      .select()
+      .from(projectsTable)
+      .orderBy(projectsTable.position);
+    if (rows.length > 0) {
+      return rows.map((row) => ({
+        id: row.id,
+        title: row.title,
+        year: row.year,
+        role: row.role,
+        summary: row.summary,
+        tags: row.tags ?? [],
+        image: row.image ?? undefined,
+        href: row.href ?? undefined,
+        github: row.github ?? undefined,
+        slug: row.slug ?? undefined,
+        description: row.description ?? undefined,
+        problem: row.problem ?? undefined,
+        outcome: row.outcome ?? undefined,
+        features: row.features ?? [],
+        images: row.images ?? [],
+        appStore: row.appStore ?? undefined,
+        playStore: row.playStore ?? undefined,
+      }));
+    }
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
   }
 
   const migrated = await cloudinaryJson<CmsProject[]>("dks-cms/projects");
   const data =
     migrated && migrated.length > 0 ? migrated : seedProjects;
-  await writeProjects(data);
+  try {
+    await writeProjects(data);
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
+  }
   return data;
 }
 
@@ -213,24 +249,36 @@ export async function writeProjects(items: CmsProject[]) {
 }
 
 export async function readExperience() {
-  const rows = await db
-    .select()
-    .from(experienceTable)
-    .orderBy(experienceTable.position);
-  if (rows.length > 0) {
-    return rows.map((row) => ({
-      id: row.id,
-      company: row.company,
-      role: row.role,
-      period: row.period,
-      detail: row.detail,
-    }));
+  try {
+    const rows = await db
+      .select()
+      .from(experienceTable)
+      .orderBy(experienceTable.position);
+    if (rows.length > 0) {
+      return rows.map((row) => ({
+        id: row.id,
+        company: row.company,
+        role: row.role,
+        period: row.period,
+        detail: row.detail,
+      }));
+    }
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
   }
 
   const migrated = await cloudinaryJson<CmsExperience[]>("dks-cms/experience");
   const data =
     migrated && migrated.length > 0 ? migrated : seedExperience;
-  await writeExperience(data);
+  try {
+    await writeExperience(data);
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
+  }
   return data;
 }
 
@@ -254,25 +302,37 @@ export async function writeExperience(items: CmsExperience[]) {
 }
 
 export async function readEducation() {
-  const rows = await db
-    .select()
-    .from(educationTable)
-    .orderBy(educationTable.position);
-  if (rows.length > 0) {
-    return rows.map((row) => ({
-      id: row.id,
-      school: row.school,
-      degree: row.degree,
-      period: row.period,
-      grade: row.grade ?? undefined,
-      detail: row.detail,
-    }));
+  try {
+    const rows = await db
+      .select()
+      .from(educationTable)
+      .orderBy(educationTable.position);
+    if (rows.length > 0) {
+      return rows.map((row) => ({
+        id: row.id,
+        school: row.school,
+        degree: row.degree,
+        period: row.period,
+        grade: row.grade ?? undefined,
+        detail: row.detail,
+      }));
+    }
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
   }
 
   const migrated = await cloudinaryJson<CmsEducation[]>("dks-cms/education");
   const data =
     migrated && migrated.length > 0 ? migrated : seedEducation;
-  await writeEducation(data);
+  try {
+    await writeEducation(data);
+  } catch (error) {
+    if (!missingTable(error)) {
+      throw error;
+    }
+  }
   return data;
 }
 

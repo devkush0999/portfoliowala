@@ -9,7 +9,12 @@ export default defineConfig({
   dialect: "turso",
   tablesFilter: ["cms_*"],
   dbCredentials: {
-    url: process.env.TURSO_DATABASE_URL ?? process.env.DATABASE_URL ?? "",
-    authToken: process.env.TURSO_AUTH_TOKEN,
+    url:
+      process.env.TURSO_DATABASE_URL ||
+      process.env.devesh_TURSO_DATABASE_URL ||
+      process.env.DATABASE_URL ||
+      "",
+    authToken:
+      process.env.TURSO_AUTH_TOKEN || process.env.devesh_TURSO_AUTH_TOKEN,
   },
 });

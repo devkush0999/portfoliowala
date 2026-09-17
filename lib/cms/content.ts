@@ -85,9 +85,13 @@ export async function getClusterPosts(category: CategorySlug) {
 }
 
 export async function getAllProjects() {
-  const remote = await readProjects();
-  const data = remote && remote.length > 0 ? remote : seedProjects;
-  return data.map(hydrateProject);
+  try {
+    const remote = await readProjects();
+    const data = remote && remote.length > 0 ? remote : seedProjects;
+    return data.map(hydrateProject);
+  } catch {
+    return seedProjects.map(hydrateProject);
+  }
 }
 
 export async function getProject(slug: string) {
@@ -141,8 +145,12 @@ function hydrateProject(project: CmsProject): CmsProject {
 
 export const getAllExperience = unstable_cache(
   async () => {
-    const remote = await readExperience();
-    return remote && remote.length > 0 ? remote : seedExperience;
+    try {
+      const remote = await readExperience();
+      return remote && remote.length > 0 ? remote : seedExperience;
+    } catch {
+      return seedExperience;
+    }
   },
   ["cms-experience"],
   { tags: ["cms-experience"] },
@@ -150,8 +158,12 @@ export const getAllExperience = unstable_cache(
 
 export const getAllEducation = unstable_cache(
   async () => {
-    const remote = await readEducation();
-    return remote && remote.length > 0 ? remote : seedEducation;
+    try {
+      const remote = await readEducation();
+      return remote && remote.length > 0 ? remote : seedEducation;
+    } catch {
+      return seedEducation;
+    }
   },
   ["cms-education"],
   { tags: ["cms-education"] },
