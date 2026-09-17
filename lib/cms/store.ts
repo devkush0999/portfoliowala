@@ -163,6 +163,14 @@ export async function readProjects() {
       image: row.image ?? undefined,
       href: row.href ?? undefined,
       github: row.github ?? undefined,
+      slug: row.slug ?? undefined,
+      description: row.description ?? undefined,
+      problem: row.problem ?? undefined,
+      outcome: row.outcome ?? undefined,
+      features: row.features ?? [],
+      images: row.images ?? [],
+      appStore: row.appStore ?? undefined,
+      playStore: row.playStore ?? undefined,
     }));
   }
 
@@ -190,6 +198,14 @@ export async function writeProjects(items: CmsProject[]) {
         image: item.image || null,
         href: item.href || null,
         github: item.github || null,
+        slug: item.slug || null,
+        description: item.description || null,
+        problem: item.problem || null,
+        outcome: item.outcome || null,
+        features: item.features ?? [],
+        images: item.images ?? [],
+        appStore: item.appStore || null,
+        playStore: item.playStore || null,
         position,
       })),
     );

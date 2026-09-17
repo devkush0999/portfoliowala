@@ -32,6 +32,14 @@ export const projects = sqliteTable("cms_projects", {
   image: text("image"),
   href: text("href"),
   github: text("github"),
+  slug: text("slug"),
+  description: text("description"),
+  problem: text("problem"),
+  outcome: text("outcome"),
+  features: text("features", { mode: "json" }).$type<string[]>().notNull().default([]),
+  images: text("images", { mode: "json" }).$type<string[]>().notNull().default([]),
+  appStore: text("app_store"),
+  playStore: text("play_store"),
   position: integer("position").notNull().default(0),
 });
 

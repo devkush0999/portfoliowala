@@ -15,14 +15,22 @@ import { Container } from "@/components/ui";
 function blank(): CmsProject {
   return {
     id: crypto.randomUUID(),
+    slug: "",
     title: "",
     year: String(new Date().getFullYear()),
     role: "",
     summary: "",
+    description: "",
+    problem: "",
+    outcome: "",
+    features: [],
+    images: [],
     tags: [],
     image: "",
     href: "",
     github: "",
+    appStore: "",
+    playStore: "",
   };
 }
 
@@ -34,15 +42,31 @@ export default function AdminProjectsPage() {
   useEffect(() => {
     fetch("/api/admin/projects")
       .then((response) => response.json())
-      .then(setItems);
+      .then((data: CmsProject[]) =>
+        setItems(
+          data.map((item) => ({
+            ...item,
+            features: item.features ?? [],
+            images: item.images ?? [],
+          })),
+        ),
+      );
   }, []);
+
+  function patch(index: number, next: Partial<CmsProject>) {
+    setItems((current) =>
+      current.map((item, i) => (i === index ? { ...item, ...next } : item)),
+    );
+  }
 
   return (
     <Container className="py-16">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-4xl text-ink">Projects</h1>
-          <p className="mt-2 text-ink/80">Add, edit, and upload screenshots.</p>
+          <p className="mt-2 text-ink/80">
+            Banner, description, problem, features, gallery, and links.
+          </p>
         </div>
         <button
           type="button"
@@ -63,11 +87,15 @@ export default function AdminProjectsPage() {
               <input
                 className={inputClass}
                 value={item.title}
-                onChange={(event) => {
-                  const next = [...items];
-                  next[index] = { ...item, title: event.target.value };
-                  setItems(next);
-                }}
+                onChange={(event) => patch(index, { title: event.target.value })}
+              />
+            </label>
+            <label className={labelClass}>
+              Slug
+              <input
+                className={inputClass}
+                value={item.slug ?? ""}
+                onChange={(event) => patch(index, { slug: event.target.value })}
               />
             </label>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -76,11 +104,7 @@ export default function AdminProjectsPage() {
                 <input
                   className={inputClass}
                   value={item.year}
-                  onChange={(event) => {
-                    const next = [...items];
-                    next[index] = { ...item, year: event.target.value };
-                    setItems(next);
-                  }}
+                  onChange={(event) => patch(index, { year: event.target.value })}
                 />
               </label>
               <label className={labelClass}>
@@ -88,25 +112,68 @@ export default function AdminProjectsPage() {
                 <input
                   className={inputClass}
                   value={item.role}
-                  onChange={(event) => {
-                    const next = [...items];
-                    next[index] = { ...item, role: event.target.value };
-                    setItems(next);
-                  }}
+                  onChange={(event) => patch(index, { role: event.target.value })}
                 />
               </label>
             </div>
             <label className={labelClass}>
-              Summary
+              Short description
               <textarea
                 rows={3}
                 className={areaClass}
                 value={item.summary}
-                onChange={(event) => {
-                  const next = [...items];
-                  next[index] = { ...item, summary: event.target.value };
-                  setItems(next);
-                }}
+                onChange={(event) =>
+                  patch(index, { summary: event.target.value })
+                }
+              />
+            </label>
+            <label className={labelClass}>
+              Description
+              <textarea
+                rows={8}
+                className={areaClass}
+                value={item.description ?? ""}
+                onChange={(event) =>
+                  patch(index, { description: event.target.value })
+                }
+              />
+            </label>
+            <label className={labelClass}>
+              Problem it solves
+              <textarea
+                rows={4}
+                className={areaClass}
+                value={item.problem ?? ""}
+                onChange={(event) =>
+                  patch(index, { problem: event.target.value })
+                }
+              />
+            </label>
+            <label className={labelClass}>
+              Features
+              <textarea
+                rows={5}
+                className={areaClass}
+                value={item.features.join("\n")}
+                onChange={(event) =>
+                  patch(index, {
+                    features: event.target.value
+                      .split("\n")
+                      .map((line) => line.trim())
+                      .filter(Boolean),
+                  })
+                }
+              />
+            </label>
+            <label className={labelClass}>
+              Outcome
+              <textarea
+                rows={3}
+                className={areaClass}
+                value={item.outcome ?? ""}
+                onChange={(event) =>
+                  patch(index, { outcome: event.target.value })
+                }
               />
             </label>
             <label className={labelClass}>
@@ -114,38 +181,62 @@ export default function AdminProjectsPage() {
               <input
                 className={inputClass}
                 value={item.tags.join(", ")}
-                onChange={(event) => {
-                  const next = [...items];
-                  next[index] = {
-                    ...item,
+                onChange={(event) =>
+                  patch(index, {
                     tags: event.target.value
                       .split(",")
                       .map((tag) => tag.trim())
                       .filter(Boolean),
-                  };
-                  setItems(next);
-                }}
+                  })
+                }
               />
             </label>
             <ImageUpload
+              label="Banner image"
               value={item.image}
-              onChange={(url) => {
-                const next = [...items];
-                next[index] = { ...item, image: url };
-                setItems(next);
-              }}
+              onChange={(url) => patch(index, { image: url })}
             />
+            <div className="grid gap-4">
+              <p className="text-sm font-medium text-ink">Gallery images</p>
+              {item.images.map((src, imageIndex) => (
+                <div key={`${item.id}-img-${imageIndex}`} className="grid gap-2">
+                  <ImageUpload
+                    label={`Image ${imageIndex + 1}`}
+                    value={src}
+                    onChange={(url) => {
+                      const images = [...item.images];
+                      images[imageIndex] = url;
+                      patch(index, { images });
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="justify-self-start text-sm text-red-700"
+                    onClick={() =>
+                      patch(index, {
+                        images: item.images.filter((_, i) => i !== imageIndex),
+                      })
+                    }
+                  >
+                    Remove image
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className={ghostButtonClass + " w-fit"}
+                onClick={() => patch(index, { images: [...item.images, ""] })}
+              >
+                Add image
+              </button>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className={labelClass}>
                 Live URL
                 <input
                   className={inputClass}
                   value={item.href ?? ""}
-                  onChange={(event) => {
-                    const next = [...items];
-                    next[index] = { ...item, href: event.target.value };
-                    setItems(next);
-                  }}
+                  onChange={(event) => patch(index, { href: event.target.value })}
                 />
               </label>
               <label className={labelClass}>
@@ -153,11 +244,29 @@ export default function AdminProjectsPage() {
                 <input
                   className={inputClass}
                   value={item.github ?? ""}
-                  onChange={(event) => {
-                    const next = [...items];
-                    next[index] = { ...item, github: event.target.value };
-                    setItems(next);
-                  }}
+                  onChange={(event) =>
+                    patch(index, { github: event.target.value })
+                  }
+                />
+              </label>
+              <label className={labelClass}>
+                App Store
+                <input
+                  className={inputClass}
+                  value={item.appStore ?? ""}
+                  onChange={(event) =>
+                    patch(index, { appStore: event.target.value })
+                  }
+                />
+              </label>
+              <label className={labelClass}>
+                Play Store
+                <input
+                  className={inputClass}
+                  value={item.playStore ?? ""}
+                  onChange={(event) =>
+                    patch(index, { playStore: event.target.value })
+                  }
                 />
               </label>
             </div>

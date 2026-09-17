@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FaqList } from "@/components/FaqList";
 import { JsonLd } from "@/components/JsonLd";
 import { PostCard } from "@/components/PostCard";
+import { ProjectBanner } from "@/components/ProjectCard";
 import { Container, SectionHeading } from "@/components/ui";
 import { faqJsonLd } from "@/lib/jsonld";
 import { getAllPosts, getAllProjects } from "@/lib/cms/content";
@@ -132,17 +133,12 @@ export default async function Home() {
           />
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {projectList.slice(0, 4).map((project) => (
-              <article
+              <Link
                 key={project.id}
-                className="overflow-hidden rounded-md border border-line bg-surface"
+                href={`/work/${project.slug || project.id}`}
+                className="overflow-hidden rounded-md border border-line bg-surface transition hover:border-accent"
               >
-                {project.image ? (
-                  <img
-                    src={project.image}
-                    alt=""
-                    className="h-44 w-full object-cover"
-                  />
-                ) : null}
+                <ProjectBanner project={project} className="h-44" />
                 <div className="p-7">
                   <p className="text-xs uppercase tracking-[0.16em] text-muted">
                     {project.year} · {project.role}
@@ -154,7 +150,7 @@ export default async function Home() {
                     {project.summary}
                   </p>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
           <Link

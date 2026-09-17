@@ -33,11 +33,12 @@ export default async function WorkPage() {
       />
       <Container className="py-16">
         <SectionHeading
+          as="h1"
           eyebrow="Work"
           title="Shipped products, not mockups"
-          description="A short record of apps and systems that made it to users. I will keep adding case studies as I publish deeper write-ups."
+          description="Case studies with the problem, the product, and what actually shipped. Banner, screens, and links live on each project."
         />
-        <div className="mt-12 grid gap-6">
+        <div className="mt-12 grid gap-8">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}

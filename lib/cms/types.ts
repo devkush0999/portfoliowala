@@ -24,14 +24,22 @@ export type CmsPost = {
 
 export type CmsProject = {
   id: string;
+  slug?: string;
   title: string;
   year: string;
   role: string;
   summary: string;
+  description?: string;
+  problem?: string;
+  outcome?: string;
+  features: string[];
+  images: string[];
   tags: string[];
   image?: string;
   href?: string;
   github?: string;
+  appStore?: string;
+  playStore?: string;
 };
 
 export type CmsExperience = {

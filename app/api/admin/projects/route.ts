@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
-import { readProjects, writeProjects } from "@/lib/cms/store";
-import { revalidateCms } from "@/lib/cms/content";
-import { seedProjects } from "@/lib/cms/seed";
+import { writeProjects } from "@/lib/cms/store";
+import { getAllProjects, revalidateCms } from "@/lib/cms/content";
 import type { CmsProject } from "@/lib/cms/types";
 
 export async function GET() {
-  const remote = await readProjects();
-  return NextResponse.json(remote && remote.length > 0 ? remote : seedProjects);
+  return NextResponse.json(await getAllProjects());
 }
 
 export async function PUT(request: Request) {

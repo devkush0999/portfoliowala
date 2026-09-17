@@ -1,3 +1,4 @@
+import type { CmsProject } from "@/lib/cms/types";
 import { faqs, site } from "@/lib/site";
 import { absoluteUrl } from "@/lib/seo";
 import type { Post } from "@/lib/posts";
@@ -226,5 +227,39 @@ export function collectionJsonLd({
         name: post.title,
       })),
     },
+  };
+}
+
+export function projectJsonLd(project: CmsProject) {
+  const url = absoluteUrl(`/work/${project.slug || project.id}`);
+  const image = project.image || project.images[0];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${url}#app`,
+    name: project.title,
+    description: project.summary,
+    url,
+    image: image ? [image] : undefined,
+    applicationCategory: project.tags[0] || "MobileApplication",
+    operatingSystem: project.tags.includes("iOS")
+      ? "iOS"
+      : project.tags.includes("Android")
+        ? "Android"
+        : "iOS, Android",
+    author: {
+      "@type": "Person",
+      "@id": absoluteUrl("/#person"),
+      name: site.name,
+      url: site.url,
+    },
+    datePublished: project.year,
+    sameAs: [
+      project.href,
+      project.github,
+      project.appStore,
+      project.playStore,
+    ].filter((item): item is string => Boolean(item)),
   };
 }

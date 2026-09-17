@@ -9,7 +9,7 @@ import {
   seedExperience,
   seedProjects,
 } from "@/lib/cms/seed";
-import type { CmsPost } from "@/lib/cms/types";
+import type { CmsPost, CmsProject } from "@/lib/cms/types";
 import {
   compileSections,
   sectionsFromContent,
@@ -86,7 +86,57 @@ export async function getClusterPosts(category: CategorySlug) {
 
 export async function getAllProjects() {
   const remote = await readProjects();
-  return remote && remote.length > 0 ? remote : seedProjects;
+  const data = remote && remote.length > 0 ? remote : seedProjects;
+  return data.map(hydrateProject);
+}
+
+export async function getProject(slug: string) {
+  const projects = await getAllProjects();
+  return (
+    projects.find(
+      (project) => project.slug === slug || project.id === slug,
+    ) ?? null
+  );
+}
+
+function filled(value?: string) {
+  return Boolean(value && value.trim());
+}
+
+export function projectPath(project: CmsProject) {
+  return `/work/${project.slug || project.id}`;
+}
+
+function hydrateProject(project: CmsProject): CmsProject {
+  const seed = seedProjects.find((item) => item.id === project.id);
+  if (!seed) {
+    return {
+      ...project,
+      features: project.features ?? [],
+      images: project.images ?? [],
+      slug: project.slug || project.id,
+    };
+  }
+
+  return {
+    ...seed,
+    ...project,
+    summary: filled(project.summary) ? project.summary : seed.summary,
+    description: filled(project.description)
+      ? project.description
+      : seed.description,
+    problem: filled(project.problem) ? project.problem : seed.problem,
+    outcome: filled(project.outcome) ? project.outcome : seed.outcome,
+    features: project.features?.length ? project.features : seed.features,
+    images: project.images?.length ? project.images : seed.images,
+    image: project.image || seed.image,
+    href: project.href || seed.href,
+    github: project.github || seed.github,
+    appStore: project.appStore || seed.appStore,
+    playStore: project.playStore || seed.playStore,
+    slug: project.slug || seed.slug || project.id,
+    tags: project.tags?.length ? project.tags : seed.tags,
+  };
 }
 
 export const getAllExperience = unstable_cache(
@@ -168,6 +218,7 @@ export function revalidateCms() {
   revalidatePath("/blog/[slug]", "page");
   revalidatePath("/blog/category/[category]", "page");
   revalidatePath("/work");
+  revalidatePath("/work/[id]", "page");
   revalidatePath("/about");
   revalidatePath("/admin");
   revalidatePath("/admin/posts");
