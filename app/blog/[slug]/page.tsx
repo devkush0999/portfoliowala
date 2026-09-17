@@ -52,6 +52,7 @@ export default async function BlogPostPage({
 
   const category = getCategory(post.category);
   const related = await getRelatedPosts(post);
+  const author = post.author || site.name;
 
   return (
     <>
@@ -66,49 +67,59 @@ export default async function BlogPostPage({
       {post.faq && post.faq.length > 0 ? (
         <JsonLd data={faqJsonLd(post.faq)} />
       ) : null}
-      <Container className="py-16 sm:py-20">
-        <div className="max-w-[68ch]">
-          <p className="text-xs uppercase tracking-[0.16em] text-muted">
-            <Link href="/blog" className="hover:text-accent">
-              Writing
-            </Link>
-            {category ? (
-              <>
-                {" / "}
-                <Link
-                  href={`/blog/category/${post.category}`}
-                  className="text-accent"
-                >
-                  {category.label}
-                </Link>
-              </>
+      <Container className="py-12 sm:py-16">
+        <article>
+          <header className="mx-auto max-w-[72ch]">
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted">
+              <Link href="/blog" className="hover:text-accent">
+                Writing
+              </Link>
+              {category ? (
+                <>
+                  {" / "}
+                  <Link
+                    href={`/blog/category/${post.category}`}
+                    className="text-accent"
+                  >
+                    {category.label}
+                  </Link>
+                </>
+              ) : null}
+            </p>
+            <h1 className="mt-4 font-display text-4xl leading-[1.12] tracking-tight text-ink sm:text-5xl">
+              {post.title}
+            </h1>
+            {post.description ? (
+              <p
+                id="answer"
+                className="mt-5 text-xl leading-8 text-ink/85"
+              >
+                {post.description}
+              </p>
             ) : null}
-          </p>
-          <h1 className="mt-4 font-display text-4xl leading-tight tracking-tight text-ink sm:text-5xl">
-            {post.title}
-          </h1>
-          <p id="answer" className="mt-5 text-xl leading-8 text-ink">
-            {post.description}
-          </p>
-          <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted">
-            <Link href="/about" rel="author" className="hover:text-accent">
-              {post.author || site.name}
-            </Link>
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
-            {post.updated && post.updated !== post.date ? (
-              <span>Updated {formatDate(post.updated)}</span>
-            ) : null}
-            <span>{post.readingTime}</span>
-          </div>
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 border-y border-line py-4 text-sm text-muted">
+              <Link href="/about" rel="author" className="text-ink hover:text-accent">
+                {author}
+              </Link>
+              <time dateTime={post.date}>{formatDate(post.date)}</time>
+              {post.updated && post.updated !== post.date ? (
+                <span>Updated {formatDate(post.updated)}</span>
+              ) : null}
+              <span>{post.readingTime}</span>
+            </div>
+          </header>
           {post.cover ? (
-            <img
-              src={post.cover}
-              alt={post.title}
-              className="mt-8 w-full rounded-md border border-line object-cover"
-            />
+            <figure className="mx-auto mt-8 max-w-4xl">
+              <img
+                src={post.cover}
+                alt={post.title}
+                fetchPriority="high"
+                className="aspect-[16/9] w-full rounded-md border border-line object-cover"
+              />
+            </figure>
           ) : null}
           {post.tags.length > 0 ? (
-            <ul className="mt-6 flex flex-wrap gap-2">
+            <ul className="mx-auto mt-6 flex max-w-[72ch] flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <li
                   key={tag}
@@ -119,25 +130,32 @@ export default async function BlogPostPage({
               ))}
             </ul>
           ) : null}
-        </div>
-        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,68ch)_220px]">
-          <article className="max-w-[68ch]">
-            <MDXContent source={post.content} />
-            {post.faq && post.faq.length > 0 ? (
-              <div className="mt-14">
-                <h2 className="font-display text-2xl text-ink">FAQ</h2>
-                <div className="mt-6">
-                  <FaqList items={post.faq} />
-                </div>
+          <div className="mt-12 grid items-start gap-10 lg:grid-cols-[minmax(0,72ch)_minmax(200px,1fr)] lg:gap-14">
+            <TableOfContents headings={post.headings} />
+            <div className="min-w-0 lg:order-first">
+              <div className="max-w-[72ch]">
+                <MDXContent source={post.content} />
               </div>
-            ) : null}
-          </article>
-          <TableOfContents headings={post.headings} />
-        </div>
+              {post.faq && post.faq.length > 0 ? (
+                <section className="mt-16 max-w-[72ch] border-t border-line pt-12">
+                  <h2 className="font-display text-2xl tracking-tight text-ink sm:text-3xl">
+                    Questions people ask
+                  </h2>
+                  <p className="mt-3 text-base leading-7 text-ink/80">
+                    Short answers for search, assistants, and anyone skimming.
+                  </p>
+                  <div className="mt-8">
+                    <FaqList items={post.faq} />
+                  </div>
+                </section>
+              ) : null}
+            </div>
+          </div>
+        </article>
         {related.length > 0 ? (
           <section className="mt-16 border-t border-line pt-12">
-            <h2 className="font-display text-2xl text-ink">Related writing</h2>
-            <div className="mt-8 grid gap-8 md:grid-cols-3">
+            <h2 className="font-display text-2xl text-ink">Keep reading</h2>
+            <div className="mt-8 grid gap-10 md:grid-cols-3">
               {related.map((item) => (
                 <PostCard key={item.slug} post={item} />
               ))}

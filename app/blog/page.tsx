@@ -9,16 +9,19 @@ import { getAllPosts } from "@/lib/cms/content";
 export const revalidate = 60;
 
 export const metadata = pageMetadata({
-  title: "Writing on React Native, carbon, ESG and software",
+  title: "Writing on React Native, mobile apps, ESG and software",
   description:
-    "Long-form writing by Devesh Kumar Singh on React Native, TypeScript, AI, backend systems, carbon emissions, GHG accounting, ESG, and sustainability software.",
+    "Devesh Kumar Singh writes on React Native, AI, FinTech, EdTech, ERP, vendor procurement, ESG, and sustainability. Mobile engineer from Jaunpur, working in Gurugram.",
   path: "/blog",
   keywords: [
     "Devesh Kumar Singh blog",
     "React Native blog",
-    "carbon emissions blog",
+    "AI React Native",
+    "FinTech app",
+    "EdTech app",
+    "ERP mobile app",
+    "vendor procurement",
     "ESG software blog",
-    "sustainability engineering blog",
   ],
 });
 
@@ -47,8 +50,8 @@ export default async function BlogPage() {
         <SectionHeading
           as="h1"
           eyebrow="Writing"
-          title="Notes from shipping software and climate systems"
-          description="Production writing on React Native, TypeScript, AI, and backend, plus carbon emissions, GHG accounting, ESG, and sustainability products. Written to be indexed, cited, and useful."
+          title="Notes from shipping mobile apps and climate systems"
+          description="Production writing on React Native, AI, FinTech, EdTech, ERP, vendor procurement, ESG, and sustainability. Written so search and assistants can find Devesh Kumar Singh."
         />
         <div className="mt-8">
           <CategoryPills />

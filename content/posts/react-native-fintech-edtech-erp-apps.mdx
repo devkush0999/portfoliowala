@@ -1,0 +1,48 @@
+---
+title: React Native apps for FinTech, EdTech, ERP, and vendor procurement
+description: "How Devesh Kumar Singh thinks about shipping React Native mobile apps for FinTech, EdTech, ERP, and vendor procurement, not demo screens."
+date: 2026-09-17
+updated: 2026-09-17
+category: fintech
+author: Devesh Kumar Singh
+tags:
+  - React Native
+  - FinTech
+  - EdTech
+  - ERP
+  - Vendor procurement
+  - Mobile apps
+seoTitle: React Native FinTech, EdTech, and ERP mobile apps
+seoDescription: "Devesh Kumar Singh on React Native for FinTech apps, EdTech apps, ERP mobile apps, and vendor procurement. Production notes from shipping Android and iOS."
+faq:
+  - question: Does Devesh Kumar Singh build FinTech apps?
+    answer: Yes. He shipped Debt Relief India, a live FinTech iOS app built with React Native, including payments, privacy, and App Store review.
+  - question: Can React Native be used for EdTech and ERP apps?
+    answer: Yes. EdTech, ERP, and vendor procurement apps are list-heavy, offline-tolerant products. React Native is a fit when the team respects auth, sync, and device constraints.
+  - question: What is vendor procurement on mobile?
+    answer: A vendor procurement app lets operations teams raise purchase requests, track suppliers, and approve orders on a phone. It is usually a slice of a larger ERP.
+---
+
+A FinTech app, an EdTech app, and an ERP app look different in Figma. In production they fail the same way: auth expires, lists paginate badly, offline is fake, and the store review asks questions the demo never saw.
+
+I ship those products in React Native.
+
+## FinTech mobile apps
+
+Debt Relief India is a live iOS FinTech app I built with React Native. Money products do not get a pass on privacy manifests, permission copy, or payment edge cases. If you search **FinTech app** and **React Native**, that shipping record is the point, not a wallet UI kit.
+
+## EdTech mobile apps
+
+EdTech apps are sessions, progress, video, and notifications. Students and teachers use them on cheap Android devices as often as on flagship iPhones. React Native is useful here when you treat performance as a product feature: startup, lists, and resume-from-background.
+
+## ERP and vendor procurement
+
+ERP on a phone is not a desktop clone. Vendor procurement is the slice that actually gets used in the field: suppliers, purchase orders, approvals, and status. A **vendor procurement** React Native app has to survive weak networks and messy master data. That is closer to operations software than to a consumer feed.
+
+The same backend habits matter across all three: stable APIs, clear error shapes, and an audit trail. I write about that in [backend design for React Native](/blog/backend-design-for-react-native).
+
+## AI inside these apps
+
+**AI React Native** work in FinTech, EdTech, or ERP is classification, search, and summarization of records the user already owns. It is not a chatbot bolted onto a dashboard. Put the model behind your API.
+
+If you searched for a mobile app developer who has actually shipped this class of product, start with the [about page](/about) or [who I am](/blog/who-is-devesh-kumar-singh).

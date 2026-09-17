@@ -4,33 +4,53 @@ export const site = {
   handle: "deveshkumarsingh",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://deveshkumarsingh.com",
   title:
-    "Devesh Kumar Singh | React Native, Carbon, ESG & Sustainability Engineer",
+    "Devesh Kumar Singh | React Native, Mobile Apps, ESG & Sustainability",
   description:
-    "Devesh Kumar Singh writes production notes on React Native, TypeScript, AI, backend systems, carbon emissions, GHG accounting, ESG, and sustainability software. Mobile engineer at GreensTurn, Gurugram.",
+    "Devesh Kumar Singh is a React Native and mobile app developer from Jaunpur, Uttar Pradesh, now working in Gurugram. He ships Android and iOS apps across AI, FinTech, EdTech, ERP, vendor procurement, ESG, and sustainability.",
   jobTitle: "React Native Developer",
   worksFor: "GreensTurn",
   location: "Gurugram, India",
+  hometown: "Jaunpur, Uttar Pradesh",
+  region: "Varanasi, Uttar Pradesh",
+  givenName: "Devesh",
+  additionalName: "Kumar",
+  familyName: "Singh",
+  alternateNames: [
+    "Devesh Singh",
+    "Devesh Kumar",
+    "Devesh Thakur",
+    "Devesh Kumar Singh Thakur",
+  ],
   email: "hello@deveshkumarsingh.com",
   locale: "en_IN",
   language: "en-IN",
   keywords: [
     "Devesh Kumar Singh",
-    "Devesh Kumar Singh React Native",
+    "Devesh Singh",
+    "Devesh Kumar",
+    "Devesh Thakur",
+    "Devesh Kumar Singh Thakur",
+    "Devesh Kumar Singh Rajput",
+    "Devesh Kumar Singh Jaunpur",
+    "Devesh Kumar Singh Varanasi",
     "React Native developer",
+    "React Native developer India",
     "React Native engineer Gurugram",
+    "mobile app developer",
+    "AI React Native",
+    "React Native AI apps",
+    "ESG software",
+    "sustainability engineering",
+    "vendor procurement software",
+    "ERP mobile app",
+    "EdTech app",
+    "FinTech app",
     "carbon emissions software",
     "carbon accounting",
     "GHG Protocol",
-    "Scope 1 2 3 emissions",
-    "ESG software",
-    "sustainability engineering",
-    "decarbonization software",
     "contextual intelligence engine",
     "TypeScript",
     "Next.js",
-    "mobile app developer India",
-    "AI mobile apps",
-    "backend for React Native",
   ],
   sameAs: [
     "https://www.linkedin.com/in/devesh-kumar-singh-mobile-app",
@@ -106,11 +126,30 @@ export const categories = [
     description:
       "React, Next.js, and the web surfaces around mobile products.",
   },
+  {
+    slug: "fintech",
+    label: "FinTech",
+    description:
+      "React Native FinTech apps, payments, privacy, and App Store shipping.",
+  },
+  {
+    slug: "edtech",
+    label: "EdTech",
+    description:
+      "EdTech mobile apps for learning, teachers, and students on Android and iOS.",
+  },
+  {
+    slug: "erp",
+    label: "ERP",
+    description:
+      "ERP and vendor procurement mobile apps for operations, purchase, and suppliers.",
+  },
 ] as const;
 
 export const topicClusters: Record<string, readonly CategorySlug[]> = {
   climate: ["esg", "sustainability", "carbon", "contextual-intelligence"],
   engineering: ["react-native", "ai", "backend", "typescript", "web"],
+  products: ["fintech", "edtech", "erp"],
 };
 
 export type CategorySlug = (typeof categories)[number]["slug"];
@@ -194,32 +233,36 @@ export const skills = [
   "Play Store",
   "ESG systems",
   "Sustainability tech",
+  "FinTech apps",
+  "EdTech apps",
+  "ERP",
+  "Vendor procurement",
 ] as const;
 
 export const faqs = [
   {
     question: "Who is Devesh Kumar Singh?",
     answer:
-      "Devesh Kumar Singh is a React Native and full-stack mobile engineer based in Gurugram, India. He builds production Android and iOS apps and writes about React Native, AI, backend systems, ESG, sustainability, and contextual intelligence.",
+      "Devesh Kumar Singh is a React Native and mobile app developer from Jaunpur, Uttar Pradesh, with family roots around Varanasi. He now lives in Gurugram and ships Android and iOS apps. He writes about React Native, AI, backend, ESG, sustainability, FinTech, EdTech, ERP, and vendor procurement.",
+  },
+  {
+    question: "Is Devesh Kumar Singh from Jaunpur or Varanasi?",
+    answer:
+      "Yes. Devesh Kumar Singh is from Jaunpur, Uttar Pradesh, near Varanasi. He works as a React Native developer in Gurugram.",
   },
   {
     question: "What does Devesh Kumar Singh work on now?",
     answer:
-      "He is a Mobile Application Developer at GreensTurn, working on sustainability and ESG-related product surfaces while continuing to ship React Native apps.",
+      "He is a Mobile Application Developer at GreensTurn, working on sustainability and ESG product surfaces while shipping React Native mobile apps.",
   },
   {
-    question: "What technologies does Devesh Kumar Singh use?",
+    question: "Does Devesh Kumar Singh build FinTech, EdTech, and ERP apps?",
     answer:
-      "React Native, Expo, TypeScript, React, Redux Saga, Node.js, Firebase, Supabase, AWS, Laravel, and REST APIs. He also ships apps to the Apple App Store and Google Play Store.",
+      "Yes. He has shipped a live FinTech iOS app, Debt Relief India, and writes about React Native for EdTech, ERP, and vendor procurement mobile apps as well as AI in React Native.",
   },
   {
-    question: "Where can I read Devesh Kumar Singh's React Native writing?",
+    question: "Where can I read Devesh Kumar Singh React Native writing?",
     answer:
-      "On this site at deveshkumarsingh.com/blog, with a dedicated React Native category at /blog/category/react-native.",
-  },
-  {
-    question: "Does Devesh Kumar Singh write about carbon emissions?",
-    answer:
-      "Yes. He writes about carbon accounting, GHG Protocol, Scope 1, 2 and 3 emissions, and the software used to measure and reduce them, at /blog/category/carbon and /blog/category/sustainability.",
+      "On this site at deveshkumarsingh.com/blog, including /blog/category/react-native and /blog/category/ai.",
   },
 ] as const;

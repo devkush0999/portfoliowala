@@ -8,13 +8,15 @@ import { getAllEducation, getAllExperience } from "@/lib/cms/content";
 export const dynamic = "force-static";
 
 export const metadata = pageMetadata({
-  title: "About",
+  title: "About Devesh Kumar Singh",
   description:
-    "About Devesh Kumar Singh, React Native developer at GreensTurn in Gurugram. Background across mobile apps, ESG, sustainability systems, AI, and backend work.",
+    "Devesh Kumar Singh is a React Native developer from Jaunpur, near Varanasi, now in Gurugram. He builds mobile apps for AI, FinTech, EdTech, ERP, vendor procurement, ESG, and sustainability.",
   path: "/about",
   keywords: [
     "about Devesh Kumar Singh",
-    "Devesh Kumar Singh GreensTurn",
+    "Devesh Kumar Singh Jaunpur",
+    "Devesh Kumar Singh Varanasi",
+    "Devesh Kumar Singh Thakur",
     "React Native developer Gurugram",
   ],
 });
@@ -38,21 +40,27 @@ export default async function AboutPage() {
         <SectionHeading
           eyebrow="About"
           title="The person behind the search result"
-          description="If someone types Devesh Kumar Singh React Native into Google, this page should be the unambiguous answer."
+          description="If someone searches Devesh, Kumar, Singh, React Native, Jaunpur, or Varanasi, this page should be the clear answer."
         />
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="max-w-2xl text-lg leading-8 text-ink">
             <p>
-              I am Devesh Kumar Singh, a React Native developer based in
-              Gurugram. I ship Android and iOS apps, and I currently build
-              mobile product work at GreensTurn — a sustainability company
-              working across ESG, carbon, and decarbonization.
+              I am Devesh Kumar Singh, a React Native developer from Jaunpur,
+              Uttar Pradesh, near Varanasi. I now live and work in Gurugram. I
+              ship Android and iOS apps, and I currently build mobile product
+              work at GreensTurn — a sustainability company working across ESG,
+              carbon, and decarbonization.
             </p>
             <p className="mt-5">
-              That mix is the point of this site. I want a place where I can
-              write seriously about React Native and also about ESG reporting
-              software, contextual intelligence engines, sustainability data,
-              AI in products, and the backends that keep mobile apps alive.
+              People search me as Devesh, Devesh Kumar, Devesh Singh, or Devesh
+              Thakur. I am a Rajput (Thakur) from Jaunpur. This site is the
+              source of truth for the engineer behind those names.
+            </p>
+            <p className="mt-5">
+              The work spans React Native, AI in mobile apps, backend systems,
+              FinTech, EdTech, ERP, vendor procurement, ESG reporting, and
+              sustainability software. The blog exists so search and assistants
+              can find that mix in one place.
             </p>
             <p className="mt-5">
               Before GreensTurn I built apps at QURILO TECHNOLOGIES LLC, ZOZUK,

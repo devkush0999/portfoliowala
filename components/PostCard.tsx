@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatDate, type Post } from "@/lib/posts";
 import { getCategory } from "@/lib/posts";
+import { site } from "@/lib/site";
 
 export function PostCard({
   post,
@@ -25,6 +26,8 @@ export function PostCard({
           <img
             src={post.cover}
             alt={post.title}
+            loading={featured ? "eager" : "lazy"}
+            decoding="async"
             className={`mt-4 w-full rounded-md border border-line object-cover ${
               featured ? "h-56" : "h-40"
             }`}
@@ -37,8 +40,13 @@ export function PostCard({
         >
           {post.title}
         </Heading>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-ink/80">
-          {post.description}
+        {post.description ? (
+          <p className="mt-3 max-w-2xl text-base leading-7 text-ink/80">
+            {post.description}
+          </p>
+        ) : null}
+        <p className="mt-3 text-sm text-muted">
+          {post.author || site.name}
         </p>
       </Link>
     </article>
@@ -61,7 +69,7 @@ export function PostList({
   const Heading = heading;
 
   return (
-    <div className="grid gap-10">
+    <div className="grid gap-12">
       {posts.map((post) => (
         <PostCard key={post.slug} post={post} heading={Heading} />
       ))}

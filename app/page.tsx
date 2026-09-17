@@ -24,15 +24,16 @@ export default async function Home() {
         <Container className="grid gap-12 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:py-24">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-accent">
-              {site.location} · {site.worksFor}
+              {site.hometown} · {site.location} · {site.worksFor}
             </p>
             <h1 className="mt-5 font-display text-5xl leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-7xl">
               Devesh Kumar Singh
             </h1>
             <p id="answer" className="mt-6 max-w-xl text-lg leading-8 text-ink">
-              React Native developer building production mobile apps and writing
-              about the systems behind them: AI, backend, ESG, sustainability,
-              and contextual intelligence.
+              React Native developer from Jaunpur, working in Gurugram. I ship
+              mobile apps and write so that searches for Devesh Kumar Singh,
+              React Native, AI, ESG, FinTech, EdTech, ERP, and vendor
+              procurement land here.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -51,26 +52,26 @@ export default async function Home() {
           </div>
           <div className="grid content-end gap-6 border-t border-line pt-8 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
             <p className="text-base leading-7 text-ink/80">
-              Search for <strong className="text-ink">Devesh Kumar Singh React Native</strong> and
-              this is the source of truth: the engineer, the shipped apps, and
-              the notes from building them.
+              Search for <strong className="text-ink">Devesh Kumar Singh</strong>,
+              React Native, Jaunpur, Varanasi, or a mobile app in FinTech,
+              EdTech, or ERP. This is the source of truth.
             </p>
             <dl className="grid grid-cols-2 gap-6 text-sm">
               <div>
-                <dt className="text-muted">Now</dt>
-                <dd className="mt-1 text-ink">Mobile at GreensTurn</dd>
+                <dt className="text-muted">From</dt>
+                <dd className="mt-1 text-ink">Jaunpur · Varanasi</dd>
               </div>
               <div>
-                <dt className="text-muted">Focus</dt>
-                <dd className="mt-1 text-ink">RN · ESG · AI</dd>
+                <dt className="text-muted">Now</dt>
+                <dd className="mt-1 text-ink">Gurugram · GreensTurn</dd>
+              </div>
+              <div>
+                <dt className="text-muted">Builds</dt>
+                <dd className="mt-1 text-ink">RN · AI · ESG</dd>
               </div>
               <div>
                 <dt className="text-muted">Shipped</dt>
-                <dd className="mt-1 text-ink">iOS App Store</dd>
-              </div>
-              <div>
-                <dt className="text-muted">Writes</dt>
-                <dd className="mt-1 text-ink">Production notes</dd>
+                <dd className="mt-1 text-ink">FinTech on iOS</dd>
               </div>
             </dl>
           </div>
