@@ -22,7 +22,7 @@ export default function ContactPage() {
           { name: "Contact", path: "/contact" },
         ])}
       />
-      <Container className="grid gap-12 py-16 lg:grid-cols-2">
+      <Container className="grid gap-10 py-12 sm:py-16 lg:grid-cols-2 lg:gap-12">
         <div>
           <SectionHeading
             eyebrow="Contact"
@@ -43,7 +43,7 @@ export default function ContactPage() {
             <p>Based in {site.location}</p>
           </div>
         </div>
-        <div className="rounded-md border border-line bg-surface p-7">
+        <div className="rounded-md border border-line bg-surface p-5 sm:p-7">
           <ContactForm />
         </div>
       </Container>

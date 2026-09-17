@@ -61,6 +61,7 @@ export const site = {
   github: "https://github.com/devkush0999",
   twitter: "",
   ogImage: "/og.png",
+  portrait: "/portrait.jpg",
 } as const;
 
 export const navigation = [

@@ -5,7 +5,7 @@ import { Container } from "@/components/ui";
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-line">
-      <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+      <Container className="grid gap-10 py-10 sm:grid-cols-2 sm:py-14 lg:grid-cols-4">
         <div className="lg:col-span-2">
           <p className="font-display text-2xl text-ink">{site.name}</p>
           <p className="mt-3 max-w-md text-base leading-7 text-ink/80">
@@ -16,7 +16,7 @@ export function Footer() {
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-muted">Write</p>
-          <div className="mt-4 flex flex-col gap-2 text-sm">
+          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm lg:flex lg:flex-col">
             {categories.map((category) => (
               <Link
                 key={category.slug}

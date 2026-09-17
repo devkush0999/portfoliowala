@@ -2,6 +2,7 @@ import { skills, site } from "@/lib/site";
 import { pageMetadata } from "@/lib/seo";
 import { Container, SectionHeading, TextLink } from "@/components/ui";
 import { JsonLd } from "@/components/JsonLd";
+import { Portrait } from "@/components/Portrait";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/jsonld";
 import { getAllEducation, getAllExperience } from "@/lib/cms/content";
 
@@ -36,14 +37,19 @@ export default async function AboutPage() {
           { name: "About", path: "/about" },
         ])}
       />
-      <Container className="py-16">
-        <SectionHeading
-          eyebrow="About"
-          title="The person behind the search result"
-          description="If someone searches Devesh, Kumar, Singh, React Native, Jaunpur, or Varanasi, this page should be the clear answer."
-        />
-        <div className="mt-10 grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="max-w-2xl text-lg leading-8 text-ink">
+      <Container className="py-12 sm:py-16">
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start lg:gap-12">
+          <div className="order-1 mx-auto w-full max-w-[20rem] lg:order-2 lg:mx-0 lg:max-w-none">
+            <Portrait className="aspect-[4/5] w-full" />
+          </div>
+          <div className="order-2 lg:order-1 lg:row-span-2">
+            <SectionHeading
+              as="h1"
+              eyebrow="About"
+              title="The person behind the search result"
+              description="If someone searches Devesh, Kumar, Singh, React Native, Jaunpur, or Varanasi, this page should be the clear answer."
+            />
+          <div className="mt-8 max-w-2xl text-base leading-7 text-ink sm:text-lg sm:leading-8">
             <p>
               I am Devesh Kumar Singh, a React Native developer from Jaunpur,
               Uttar Pradesh, near Varanasi. I now live and work in Gurugram. I
@@ -80,7 +86,8 @@ export default async function AboutPage() {
               <TextLink href={`mailto:${site.email}`}>{site.email}</TextLink>.
             </p>
           </div>
-          <aside className="grid h-fit gap-8 rounded-md border border-line bg-surface p-7">
+          </div>
+          <aside className="order-3 grid h-fit gap-8 rounded-md border border-line bg-surface p-5 sm:p-7 lg:order-2">
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-muted">
                 Experience

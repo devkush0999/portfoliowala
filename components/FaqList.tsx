@@ -9,8 +9,8 @@ export function FaqList({
     <div className="divide-y divide-line border-y border-line">
       {items.map((item) => (
         <details key={item.question} className="group py-5">
-          <summary className="cursor-pointer list-none font-display text-xl text-ink">
-            <span className="flex items-start justify-between gap-6">
+          <summary className="cursor-pointer list-none py-1 font-display text-lg text-ink sm:text-xl">
+            <span className="flex items-start justify-between gap-4 sm:gap-6">
               {item.question}
               <span className="text-accent transition group-open:rotate-45">+</span>
             </span>

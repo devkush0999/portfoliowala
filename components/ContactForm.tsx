@@ -73,7 +73,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={busy}
-        className="h-11 rounded-sm bg-accent px-5 text-sm font-medium text-white transition hover:bg-accent-dim"
+        className="h-12 rounded-sm bg-accent px-5 text-sm font-medium text-white transition hover:bg-accent-dim sm:h-11"
       >
         {busy ? "Sending…" : "Send message"}
       </button>

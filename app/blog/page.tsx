@@ -46,7 +46,7 @@ export default async function BlogPage() {
           { name: "Writing", path: "/blog" },
         ])}
       />
-      <Container className="py-16">
+      <Container className="py-12 sm:py-16">
         <SectionHeading
           as="h1"
           eyebrow="Writing"

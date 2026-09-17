@@ -1,10 +1,13 @@
 import type { CmsProject } from "@/lib/cms/types";
+import { getPortraitSrc } from "@/lib/portrait";
 import { faqs, site } from "@/lib/site";
 import { absoluteUrl } from "@/lib/seo";
 import type { Post } from "@/lib/posts";
 import { getCategory } from "@/lib/posts";
 
 export function personJsonLd() {
+  const portrait = getPortraitSrc();
+
   return {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -18,6 +21,7 @@ export function personJsonLd() {
     jobTitle: site.jobTitle,
     description: site.description,
     email: site.email,
+    image: portrait ? absoluteUrl(portrait) : undefined,
     nationality: "IN",
     address: {
       "@type": "PostalAddress",

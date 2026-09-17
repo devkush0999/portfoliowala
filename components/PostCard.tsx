@@ -29,13 +29,13 @@ export function PostCard({
             loading={featured ? "eager" : "lazy"}
             decoding="async"
             className={`mt-4 w-full rounded-md border border-line object-cover ${
-              featured ? "h-56" : "h-40"
+              featured ? "h-44 sm:h-56" : "h-36 sm:h-40"
             }`}
           />
         ) : null}
         <Heading
           className={`mt-3 font-display tracking-tight text-ink transition group-hover:text-accent ${
-            featured ? "text-3xl sm:text-4xl" : "text-2xl"
+            featured ? "text-2xl sm:text-4xl" : "text-xl sm:text-2xl"
           }`}
         >
           {post.title}

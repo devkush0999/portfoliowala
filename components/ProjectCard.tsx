@@ -44,7 +44,7 @@ export function ProjectCard({ project }: { project: CmsProject }) {
       <Link href={href} className="block">
         <ProjectBanner project={project} className="aspect-[16/9] max-h-72" />
       </Link>
-      <div className="grid gap-6 p-6 sm:p-8 md:grid-cols-[200px_1fr]">
+      <div className="grid gap-5 p-5 sm:gap-6 sm:p-8 md:grid-cols-[200px_1fr]">
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-accent">
             {project.year}
@@ -52,7 +52,7 @@ export function ProjectCard({ project }: { project: CmsProject }) {
           <p className="mt-3 text-sm leading-6 text-muted">{project.role}</p>
         </div>
         <div>
-          <h2 className="font-display text-3xl tracking-tight text-ink">
+          <h2 className="font-display text-2xl tracking-tight text-ink sm:text-3xl">
             <Link href={href} className="hover:text-accent">
               {project.title}
             </Link>

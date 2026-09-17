@@ -83,10 +83,10 @@ export default async function ProjectPage({
           {" / "}
           <span className="text-accent">{project.year}</span>
         </p>
-        <h1 className="mt-4 max-w-3xl font-display text-4xl leading-[1.12] tracking-tight text-ink sm:text-5xl">
+        <h1 className="mt-4 max-w-3xl font-display text-[1.85rem] leading-[1.12] tracking-tight text-ink sm:text-4xl lg:text-5xl">
           {project.title}
         </h1>
-        <p id="answer" className="mt-5 max-w-2xl text-xl leading-8 text-ink/85">
+        <p id="answer" className="mt-5 max-w-2xl text-lg leading-7 text-ink/85 sm:text-xl sm:leading-8">
           {project.summary}
         </p>
         <p className="mt-4 text-sm text-muted">{project.role}</p>

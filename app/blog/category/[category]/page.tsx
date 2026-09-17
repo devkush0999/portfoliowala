@@ -71,7 +71,7 @@ export default async function CategoryPage({
           { name: category.label, path: `/blog/category/${category.slug}` },
         ])}
       />
-      <Container className="py-16">
+      <Container className="py-12 sm:py-16">
         <SectionHeading
           as="h1"
           eyebrow="Category"

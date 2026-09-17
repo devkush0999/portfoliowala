@@ -86,13 +86,13 @@ export default async function BlogPostPage({
                 </>
               ) : null}
             </p>
-            <h1 className="mt-4 font-display text-4xl leading-[1.12] tracking-tight text-ink sm:text-5xl">
+            <h1 className="mt-4 font-display text-[1.85rem] leading-[1.12] tracking-tight text-ink sm:text-4xl lg:text-5xl">
               {post.title}
             </h1>
             {post.description ? (
               <p
                 id="answer"
-                className="mt-5 text-xl leading-8 text-ink/85"
+                className="mt-5 text-lg leading-7 text-ink/85 sm:text-xl sm:leading-8"
               >
                 {post.description}
               </p>

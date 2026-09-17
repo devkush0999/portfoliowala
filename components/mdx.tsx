@@ -23,7 +23,7 @@ export const mdxComponents = {
     <img className="mt-6 w-full rounded-md border border-line" {...props} />
   ),
   p: (props: ComponentPropsWithoutRef<"p">) => (
-    <p className="mt-6 text-lg leading-[1.8] text-ink" {...props} />
+    <p className="mt-6 text-base leading-7 text-ink sm:text-lg sm:leading-[1.8]" {...props} />
   ),
   a: (props: ComponentPropsWithoutRef<"a">) => (
     <a
@@ -32,10 +32,10 @@ export const mdxComponents = {
     />
   ),
   ul: (props: ComponentPropsWithoutRef<"ul">) => (
-    <ul className="mt-6 list-disc space-y-3 pl-6 text-lg leading-[1.8] text-ink" {...props} />
+    <ul className="mt-6 list-disc space-y-3 pl-5 text-base leading-7 text-ink sm:pl-6 sm:text-lg sm:leading-[1.8]" {...props} />
   ),
   ol: (props: ComponentPropsWithoutRef<"ol">) => (
-    <ol className="mt-6 list-decimal space-y-3 pl-6 text-lg leading-[1.8] text-ink" {...props} />
+    <ol className="mt-6 list-decimal space-y-3 pl-5 text-base leading-7 text-ink sm:pl-6 sm:text-lg sm:leading-[1.8]" {...props} />
   ),
   li: (props: ComponentPropsWithoutRef<"li">) => (
     <li className="leading-[1.8]" {...props} />
