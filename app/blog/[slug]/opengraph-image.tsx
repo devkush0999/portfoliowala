@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
-import { getPost, getPosts } from "@/lib/posts";
+import { getAllPosts, getPost } from "@/lib/cms/content";
 import { site } from "@/lib/site";
+
+export const runtime = "nodejs";
 
 export const size = {
   width: 1200,
@@ -9,8 +11,9 @@ export const size = {
 
 export const contentType = "image/png";
 
-export function generateStaticParams() {
-  return getPosts().map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export default async function Image({
@@ -19,7 +22,7 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   const title = post?.title ?? site.name;
 
   return new ImageResponse(

@@ -1,10 +1,10 @@
-import { getPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/cms/content";
 import { site } from "@/lib/site";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function GET() {
-  const posts = getPosts();
+  const posts = await getAllPosts();
   const items = posts
     .map((post) => {
       const url = `${site.url}/blog/${post.slug}`;

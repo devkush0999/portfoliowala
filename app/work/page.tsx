@@ -1,8 +1,12 @@
-import { projects, skills } from "@/lib/site";
+import { skills } from "@/lib/site";
 import { pageMetadata } from "@/lib/seo";
 import { Container, SectionHeading } from "@/components/ui";
 import { JsonLd } from "@/components/JsonLd";
+import { ProjectCard } from "@/components/ProjectCard";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
+import { getAllProjects } from "@/lib/cms/content";
+
+export const revalidate = 60;
 
 export const metadata = pageMetadata({
   title: "Work",
@@ -16,7 +20,9 @@ export const metadata = pageMetadata({
   ],
 });
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const projects = await getAllProjects();
+
   return (
     <>
       <JsonLd
@@ -33,35 +39,7 @@ export default function WorkPage() {
         />
         <div className="mt-12 grid gap-6">
           {projects.map((project) => (
-            <article
-              key={project.title}
-              className="grid gap-6 rounded-md border border-line bg-surface p-7 md:grid-cols-[200px_1fr] md:p-8"
-            >
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-accent">
-                  {project.year}
-                </p>
-                <p className="mt-3 text-sm text-muted">{project.role}</p>
-              </div>
-              <div>
-                <h2 className="font-display text-3xl text-ink">
-                  {project.title}
-                </h2>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-ink/80">
-                  {project.summary}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-line bg-bg px-3 py-1 text-xs text-ink"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </article>
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
         <div className="mt-12 rounded-md border border-line bg-surface p-7">

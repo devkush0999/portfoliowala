@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { SiteChrome } from "@/components/SiteChrome";
 import { JsonLd } from "@/components/JsonLd";
 import { personJsonLd, websiteJsonLd } from "@/lib/jsonld";
 import { site } from "@/lib/site";
@@ -79,9 +78,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col bg-bg font-sans text-ink">
         <JsonLd data={personJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

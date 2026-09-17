@@ -1,29 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import { site } from "@/lib/site";
 
 export function ContactForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const form = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState("");
+  const [busy, setBusy] = useState(false);
 
   return (
     <form
+      ref={form}
       className="grid gap-4"
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
-        const subject = encodeURIComponent(`Message from ${name}`);
-        const body = encodeURIComponent(`${message}\n\nFrom: ${name} <${email}>`);
-        window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+        if (!form.current) {
+          return;
+        }
+        setBusy(true);
+        setStatus("");
+        try {
+          await emailjs.sendForm(
+            process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "",
+            process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "",
+            form.current,
+            process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "",
+          );
+          form.current.reset();
+          setStatus("Sent. I will reply by email.");
+        } catch {
+          window.location.href = `mailto:${site.email}`;
+        }
+        setBusy(false);
       }}
     >
       <label className="grid gap-2 text-sm">
         <span className="font-medium text-ink">Name</span>
         <input
           required
-          value={name}
-          onChange={(event) => setName(event.target.value)}
+          name="from_name"
           className="h-11 rounded-sm border border-line bg-white px-3 text-ink outline-none focus:border-accent"
         />
       </label>
@@ -32,8 +48,15 @@ export function ContactForm() {
         <input
           required
           type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          name="from_email"
+          className="h-11 rounded-sm border border-line bg-white px-3 text-ink outline-none focus:border-accent"
+        />
+      </label>
+      <label className="grid gap-2 text-sm">
+        <span className="font-medium text-ink">Subject</span>
+        <input
+          required
+          name="subject"
           className="h-11 rounded-sm border border-line bg-white px-3 text-ink outline-none focus:border-accent"
         />
       </label>
@@ -41,17 +64,18 @@ export function ContactForm() {
         <span className="font-medium text-ink">Message</span>
         <textarea
           required
+          name="message"
           rows={6}
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
           className="rounded-sm border border-line bg-white px-3 py-3 text-ink outline-none focus:border-accent"
         />
       </label>
+      {status ? <p className="text-sm text-accent">{status}</p> : null}
       <button
         type="submit"
+        disabled={busy}
         className="h-11 rounded-sm bg-accent px-5 text-sm font-medium text-white transition hover:bg-accent-dim"
       >
-        Send message
+        {busy ? "Sending…" : "Send message"}
       </button>
     </form>
   );

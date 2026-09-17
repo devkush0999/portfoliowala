@@ -19,6 +19,15 @@ export function PostCard({
           <span>{formatDate(post.date)}</span>
           <span>{post.readingTime}</span>
         </div>
+        {post.cover ? (
+          <img
+            src={post.cover}
+            alt=""
+            className={`mt-4 w-full rounded-md border border-line object-cover ${
+              featured ? "h-56" : "h-40"
+            }`}
+          />
+        ) : null}
         <h3
           className={`mt-3 font-display tracking-tight text-ink transition group-hover:text-accent ${
             featured ? "text-3xl sm:text-4xl" : "text-2xl"

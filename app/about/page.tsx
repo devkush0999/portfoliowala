@@ -1,8 +1,11 @@
-import { experience, skills, site } from "@/lib/site";
+import { skills, site } from "@/lib/site";
 import { pageMetadata } from "@/lib/seo";
 import { Container, SectionHeading, TextLink } from "@/components/ui";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbJsonLd, personJsonLd } from "@/lib/jsonld";
+import { getAllEducation, getAllExperience } from "@/lib/cms/content";
+
+export const revalidate = 60;
 
 export const metadata = pageMetadata({
   title: "About",
@@ -16,7 +19,12 @@ export const metadata = pageMetadata({
   ],
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [experience, education] = await Promise.all([
+    getAllExperience(),
+    getAllEducation(),
+  ]);
+
   return (
     <>
       <JsonLd data={personJsonLd()} />
@@ -71,10 +79,26 @@ export default function AboutPage() {
               </p>
               <ul className="mt-4 grid gap-4">
                 {experience.map((item) => (
-                  <li key={item.company}>
+                  <li key={item.id}>
                     <p className="text-ink">{item.role}</p>
                     <p className="text-sm text-muted">
                       {item.company} · {item.period}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.16em] text-muted">
+                Education
+              </p>
+              <ul className="mt-4 grid gap-4">
+                {education.map((item) => (
+                  <li key={item.id}>
+                    <p className="text-ink">{item.degree}</p>
+                    <p className="text-sm text-muted">
+                      {item.school} · {item.period}
+                      {item.grade ? ` · ${item.grade}` : ""}
                     </p>
                   </li>
                 ))}

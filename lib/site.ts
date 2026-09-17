@@ -28,9 +28,10 @@ export const site = {
   sameAs: [
     "https://www.linkedin.com/in/devesh-kumar-singh-mobile-app",
     "https://dev.to/iamdeveshsingh",
+    "https://github.com/devkush0999",
   ],
   linkedin: "https://www.linkedin.com/in/devesh-kumar-singh-mobile-app",
-  github: "",
+  github: "https://github.com/devkush0999",
   twitter: "",
   ogImage: "/og.png",
 } as const;

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CategoryPills } from "@/components/CategoryPills";
 import { PostCard } from "@/components/PostCard";
 import { JsonLd } from "@/components/JsonLd";
 import { TableOfContents } from "@/components/TableOfContents";
@@ -13,18 +12,17 @@ import {
   breadcrumbJsonLd,
   faqJsonLd,
 } from "@/lib/jsonld";
-import {
-  formatDate,
-  getCategory,
-  getPost,
-  getPosts,
-  getRelatedPosts,
-} from "@/lib/posts";
+import { getPost, getAllPosts, getRelatedPosts } from "@/lib/cms/content";
+import { formatDate, getCategory } from "@/lib/posts";
 import { postMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-export function generateStaticParams() {
-  return getPosts().map((post) => ({ slug: post.slug }));
+export const revalidate = 60;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
@@ -33,7 +31,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) {
     return {};
   }
@@ -46,14 +44,14 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
 
   if (!post) {
     notFound();
   }
 
   const category = getCategory(post.category);
-  const related = getRelatedPosts(post);
+  const related = await getRelatedPosts(post);
 
   return (
     <>
@@ -100,6 +98,13 @@ export default async function BlogPostPage({
             ) : null}
             <span>{post.readingTime}</span>
           </div>
+          {post.cover ? (
+            <img
+              src={post.cover}
+              alt=""
+              className="mt-8 w-full rounded-md border border-line object-cover"
+            />
+          ) : null}
         </div>
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,68ch)_220px]">
           <article className="max-w-[68ch]">

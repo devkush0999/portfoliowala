@@ -1,10 +1,10 @@
 import { categories, site } from "@/lib/site";
-import { getPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/cms/content";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function GET() {
-  const posts = getPosts()
+  const posts = (await getAllPosts())
     .map((post) => `- [${post.title}](${site.url}/blog/${post.slug}): ${post.description}`)
     .join("\n");
 

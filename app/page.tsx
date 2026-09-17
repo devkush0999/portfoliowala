@@ -4,11 +4,16 @@ import { JsonLd } from "@/components/JsonLd";
 import { PostCard } from "@/components/PostCard";
 import { Container, SectionHeading } from "@/components/ui";
 import { faqJsonLd } from "@/lib/jsonld";
-import { getPosts } from "@/lib/posts";
-import { categories, projects, site } from "@/lib/site";
+import { getAllPosts, getAllProjects } from "@/lib/cms/content";
+import { categories, site } from "@/lib/site";
 
-export default function Home() {
-  const posts = getPosts();
+export const revalidate = 60;
+
+export default async function Home() {
+  const [posts, projectList] = await Promise.all([
+    getAllPosts(),
+    getAllProjects(),
+  ]);
   const featured = posts.find((post) => post.featured) ?? posts[0];
   const rest = posts.filter((post) => post.slug !== featured?.slug).slice(0, 3);
 
@@ -125,23 +130,38 @@ export default function Home() {
             description="Apps and systems that left the laptop and reached real users."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-2">
-            {projects.slice(0, 4).map((project) => (
+            {projectList.slice(0, 4).map((project) => (
               <article
-                key={project.title}
-                className="rounded-md border border-line bg-surface p-7"
+                key={project.id}
+                className="overflow-hidden rounded-md border border-line bg-surface"
               >
-                <p className="text-xs uppercase tracking-[0.16em] text-muted">
-                  {project.year} · {project.role}
-                </p>
-                <h3 className="mt-3 font-display text-2xl text-ink">
-                  {project.title}
-                </h3>
-                <p className="mt-3 text-base leading-7 text-ink/80">
-                  {project.summary}
-                </p>
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt=""
+                    className="h-44 w-full object-cover"
+                  />
+                ) : null}
+                <div className="p-7">
+                  <p className="text-xs uppercase tracking-[0.16em] text-muted">
+                    {project.year} · {project.role}
+                  </p>
+                  <h3 className="mt-3 font-display text-2xl text-ink">
+                    {project.title}
+                  </h3>
+                  <p className="mt-3 text-base leading-7 text-ink/80">
+                    {project.summary}
+                  </p>
+                </div>
               </article>
             ))}
           </div>
+          <Link
+            href="/work"
+            className="mt-8 inline-block text-sm text-accent hover:underline"
+          >
+            All projects →
+          </Link>
         </Container>
       </section>
 

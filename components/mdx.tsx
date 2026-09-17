@@ -13,6 +13,9 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  img: (props: ComponentPropsWithoutRef<"img">) => (
+    <img className="mt-6 w-full rounded-md border border-line" {...props} />
+  ),
   p: (props: ComponentPropsWithoutRef<"p">) => (
     <p className="mt-6 text-lg leading-[1.8] text-ink" {...props} />
   ),

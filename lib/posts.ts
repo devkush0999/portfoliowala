@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
 import { categories, type CategorySlug } from "@/lib/site";
+import type { CmsPost } from "@/lib/cms/types";
 
 const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
@@ -21,6 +22,7 @@ export type PostFrontmatter = {
   featured?: boolean;
   draft?: boolean;
   faq?: FaqItem[];
+  cover?: string;
 };
 
 export type Post = PostFrontmatter & {
@@ -60,39 +62,51 @@ function toDateString(value: unknown) {
   return "";
 }
 
-function parsePost(filename: string): Post | null {
-  const slug = filename.replace(/\.mdx$/, "");
-  const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
-  const { data, content } = matter(raw);
+export function toPost(data: CmsPost): Post | null {
   const date = toDateString(data.date);
-  const updated = data.updated ? toDateString(data.updated) : undefined;
-
   if (!data.title || !data.description || !date || !isCategory(data.category)) {
     return null;
   }
 
-  if (data.draft && process.env.NODE_ENV === "production") {
-    return null;
-  }
-
   return {
-    slug,
+    slug: data.slug,
     title: data.title,
     description: String(data.description),
     date,
-    updated: updated || undefined,
+    updated: data.updated ? toDateString(data.updated) : undefined,
     category: data.category,
     tags: Array.isArray(data.tags) ? data.tags : [],
     featured: Boolean(data.featured),
     draft: Boolean(data.draft),
     faq: Array.isArray(data.faq) ? data.faq : [],
-    content,
-    readingTime: readingTime(content).text,
-    headings: getHeadings(content),
+    cover: data.cover,
+    content: data.content,
+    readingTime: readingTime(data.content).text,
+    headings: getHeadings(data.content),
   };
 }
 
-export function getPosts() {
+function parsePost(filename: string): Post | null {
+  const slug = filename.replace(/\.mdx$/, "");
+  const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
+  const { data, content } = matter(raw);
+  return toPost({
+    slug,
+    title: data.title,
+    description: data.description,
+    date: data.date,
+    updated: data.updated,
+    category: data.category,
+    tags: Array.isArray(data.tags) ? data.tags : [],
+    featured: Boolean(data.featured),
+    draft: Boolean(data.draft),
+    faq: Array.isArray(data.faq) ? data.faq : [],
+    cover: data.cover,
+    content,
+  });
+}
+
+export function getLocalPosts() {
   if (!fs.existsSync(POSTS_DIR)) {
     return [];
   }
@@ -105,16 +119,16 @@ export function getPosts() {
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export function getPost(slug: string) {
-  return getPosts().find((post) => post.slug === slug) ?? null;
+export function getPostFrom(posts: Post[], slug: string) {
+  return posts.find((post) => post.slug === slug) ?? null;
 }
 
-export function getPostsByCategory(category: CategorySlug) {
-  return getPosts().filter((post) => post.category === category);
+export function getPostsByCategoryFrom(posts: Post[], category: CategorySlug) {
+  return posts.filter((post) => post.category === category);
 }
 
-export function getRelatedPosts(post: Post, limit = 3) {
-  return getPosts()
+export function getRelatedPostsFrom(posts: Post[], post: Post, limit = 3) {
+  return posts
     .filter((item) => item.slug !== post.slug)
     .sort((a, b) => {
       const aScore =

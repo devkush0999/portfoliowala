@@ -70,6 +70,7 @@ export function postMetadata(post: Post): Metadata {
       modifiedTime: modified,
       authors: [site.name],
       tags: post.tags,
+      images: post.cover ? [{ url: post.cover }] : undefined,
     },
     twitter: {
       card: "summary_large_image",

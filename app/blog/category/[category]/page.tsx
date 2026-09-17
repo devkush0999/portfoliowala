@@ -5,9 +5,12 @@ import { JsonLd } from "@/components/JsonLd";
 import { PostList } from "@/components/PostCard";
 import { Container, SectionHeading } from "@/components/ui";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
-import { getCategory, getPostsByCategory } from "@/lib/posts";
+import { getPostsByCategory } from "@/lib/cms/content";
+import { getCategory } from "@/lib/posts";
 import { pageMetadata } from "@/lib/seo";
 import { categories } from "@/lib/site";
+
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return categories.map((category) => ({ category: category.slug }));
@@ -44,7 +47,7 @@ export default async function CategoryPage({
     notFound();
   }
 
-  const posts = getPostsByCategory(category.slug);
+  const posts = await getPostsByCategory(category.slug);
 
   return (
     <>

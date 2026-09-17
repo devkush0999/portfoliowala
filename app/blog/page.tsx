@@ -4,7 +4,9 @@ import { CategoryPills } from "@/components/CategoryPills";
 import { PostList } from "@/components/PostCard";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
-import { getPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/cms/content";
+
+export const revalidate = 60;
 
 export const metadata = pageMetadata({
   title: "Writing",
@@ -14,8 +16,8 @@ export const metadata = pageMetadata({
   keywords: ["Devesh Kumar Singh blog", "React Native blog"],
 });
 
-export default function BlogPage() {
-  const posts = getPosts();
+export default async function BlogPage() {
+  const posts = await getAllPosts();
 
   return (
     <>
