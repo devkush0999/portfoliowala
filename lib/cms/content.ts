@@ -88,19 +88,24 @@ export async function getClusterPosts(category: CategorySlug) {
   );
 }
 
-export const getAllProjects = unstable_cache(
-  async () => {
-    try {
-      const remote = await readProjects();
-      const data = remote && remote.length > 0 ? remote : seedProjects;
-      return data.map(hydrateProject);
-    } catch {
-      return seedProjects.map(hydrateProject);
-    }
-  },
-  ["cms-projects"],
-  { revalidate: 60, tags: ["cms-projects"] },
-);
+async function loadProjects() {
+  try {
+    const remote = await readProjects();
+    const data = remote && remote.length > 0 ? remote : seedProjects;
+    return data.map(hydrateProject);
+  } catch {
+    return seedProjects.map(hydrateProject);
+  }
+}
+
+export async function getAdminProjects() {
+  return loadProjects();
+}
+
+export const getAllProjects = unstable_cache(loadProjects, ["cms-projects"], {
+  revalidate: 60,
+  tags: ["cms-projects"],
+});
 
 export async function getProject(slug: string) {
   const projects = await getAllProjects();
@@ -231,10 +236,10 @@ export function asCmsPost(post: Post): CmsPost {
 }
 
 export function revalidateCms() {
-  revalidateTag("cms-experience", "max");
-  revalidateTag("cms-education", "max");
-  revalidateTag("cms-posts", "max");
-  revalidateTag("cms-projects", "max");
+  revalidateTag("cms-experience", { expire: 0 });
+  revalidateTag("cms-education", { expire: 0 });
+  revalidateTag("cms-posts", { expire: 0 });
+  revalidateTag("cms-projects", { expire: 0 });
   revalidatePath("/");
   revalidatePath("/blog");
   revalidatePath("/blog/[slug]", "page");

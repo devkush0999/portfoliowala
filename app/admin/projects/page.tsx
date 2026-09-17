@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CmsProject } from "@/lib/cms/types";
 import { ImageUpload } from "@/components/admin/ImageUpload";
@@ -12,6 +12,14 @@ import {
   labelClass,
 } from "@/components/admin/fields";
 import { Container } from "@/components/ui";
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-");
+}
 
 function blank(): CmsProject {
   return {
@@ -35,6 +43,21 @@ function blank(): CmsProject {
   };
 }
 
+function withSlugs(list: CmsProject[]) {
+  return list.map((item) => {
+    const base = slugify(item.slug || item.title) || item.id;
+    const taken = list.some(
+      (row) =>
+        row.id !== item.id &&
+        (row.slug === base || slugify(row.title) === base),
+    );
+    return {
+      ...item,
+      slug: taken ? `${base}-${item.id.slice(0, 8)}` : base,
+    };
+  });
+}
+
 export default function AdminProjectsPage() {
   const router = useRouter();
   const [items, setItems] = useState<CmsProject[]>([]);
@@ -42,9 +65,14 @@ export default function AdminProjectsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+  const itemsRef = useRef<CmsProject[]>([]);
 
   useEffect(() => {
-    fetch("/api/admin/projects")
+    itemsRef.current = items;
+  }, [items]);
+
+  useEffect(() => {
+    fetch("/api/admin/projects", { cache: "no-store" })
       .then((response) => response.json())
       .then((data: CmsProject[]) => {
         const next = data.map((item) => ({
@@ -63,20 +91,27 @@ export default function AdminProjectsPage() {
     );
   }
 
-  async function save() {
+  async function save(list?: CmsProject[]) {
+    const source = withSlugs(list ?? itemsRef.current);
+    const open = source.find((item) => item.id === editingId);
+    if (open && !open.title.trim()) {
+      setStatus("Title is required");
+      return;
+    }
     setBusy(true);
     setStatus("");
     const response = await fetch("/api/admin/projects", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(items),
+      body: JSON.stringify(source),
     });
     setBusy(false);
     if (!response.ok) {
       setStatus("Save failed");
       return;
     }
-    setSaved(items);
+    setItems(source);
+    setSaved(source);
     setEditingId(null);
     setStatus("Saved. Live on /work.");
     router.refresh();
@@ -157,11 +192,13 @@ export default function AdminProjectsPage() {
                     type="button"
                     className="inline-flex h-11 items-center justify-center rounded-sm px-5 text-sm text-red-700"
                     onClick={() => {
-                      setItems((current) =>
-                        current.filter((_, i) => i !== index),
-                      );
+                      const next = items.filter((_, i) => i !== index);
+                      setItems(next);
                       if (editingId === item.id) {
                         setEditingId(null);
+                      }
+                      if (saved.some((row) => row.id === item.id)) {
+                        void save(next);
                       }
                     }}
                   >
@@ -176,9 +213,13 @@ export default function AdminProjectsPage() {
                     <input
                       className={inputClass}
                       value={item.title}
-                      onChange={(event) =>
-                        patch(index, { title: event.target.value })
-                      }
+                      onChange={(event) => {
+                        const title = event.target.value;
+                        patch(index, {
+                          title,
+                          slug: item.slug ? item.slug : slugify(title),
+                        });
+                      }}
                     />
                   </label>
                   <label className={labelClass}>

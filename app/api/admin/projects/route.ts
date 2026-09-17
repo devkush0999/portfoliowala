@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { writeProjects } from "@/lib/cms/store";
-import { getAllProjects, revalidateCms } from "@/lib/cms/content";
+import { getAdminProjects, revalidateCms } from "@/lib/cms/content";
 import type { CmsProject } from "@/lib/cms/types";
 
 export async function GET() {
-  return NextResponse.json(await getAllProjects());
+  return NextResponse.json(await getAdminProjects());
 }
 
 export async function PUT(request: Request) {
