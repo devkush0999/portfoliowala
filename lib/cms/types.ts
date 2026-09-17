@@ -1,5 +1,6 @@
 import type { CategorySlug } from "@/lib/site";
 import type { FaqItem } from "@/lib/posts";
+import type { CmsSection } from "@/lib/cms/sections";
 
 export type CmsPost = {
   slug: string;
@@ -14,6 +15,11 @@ export type CmsPost = {
   faq?: FaqItem[];
   content: string;
   cover?: string;
+  author?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  canonicalUrl?: string;
+  sections?: CmsSection[];
 };
 
 export type CmsProject = {

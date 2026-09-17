@@ -92,7 +92,7 @@ export default async function BlogPostPage({
           </p>
           <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted">
             <Link href="/about" rel="author" className="hover:text-accent">
-              {site.name}
+              {post.author || site.name}
             </Link>
             <time dateTime={post.date}>{formatDate(post.date)}</time>
             {post.updated && post.updated !== post.date ? (

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { deletePost, upsertPost } from "@/lib/cms/store";
-import { revalidateCms } from "@/lib/cms/content";
+import { prepareCmsPost, revalidateCms } from "@/lib/cms/content";
 import type { CmsPost } from "@/lib/cms/types";
 
 export async function PUT(
@@ -9,11 +9,11 @@ export async function PUT(
 ) {
   const { slug } = await params;
   const body = (await request.json()) as CmsPost;
+  const post = prepareCmsPost(body);
   await upsertPost(slug, {
-    ...body,
-    slug: body.slug || slug,
+    ...post,
+    slug: post.slug || slug,
     updated: new Date().toISOString().slice(0, 10),
-    tags: body.tags ?? [],
   });
   revalidateCms();
   return NextResponse.json({ ok: true });

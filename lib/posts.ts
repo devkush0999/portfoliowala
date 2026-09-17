@@ -4,6 +4,7 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 import { categories, type CategorySlug } from "@/lib/site";
 import type { CmsPost } from "@/lib/cms/types";
+import { extractHeadings, type CmsSection } from "@/lib/cms/sections";
 
 const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
@@ -23,30 +24,19 @@ export type PostFrontmatter = {
   draft?: boolean;
   faq?: FaqItem[];
   cover?: string;
+  author?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  canonicalUrl?: string;
 };
 
 export type Post = PostFrontmatter & {
   slug: string;
   content: string;
   readingTime: string;
-  headings: { id: string; text: string }[];
+  headings: { id: string; text: string; level: 2 | 3 | 4 }[];
+  sections?: CmsSection[];
 };
-
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-");
-}
-
-function getHeadings(markdown: string) {
-  const matches = markdown.matchAll(/^##\s+(.+)$/gm);
-  return [...matches].map((match) => ({
-    text: match[1].replace(/[*`]/g, "").trim(),
-    id: slugify(match[1]),
-  }));
-}
 
 function isCategory(value: unknown): value is CategorySlug {
   return categories.some((category) => category.slug === value);
@@ -64,14 +54,16 @@ function toDateString(value: unknown) {
 
 export function toPost(data: CmsPost): Post | null {
   const date = toDateString(data.date);
-  if (!data.title || !data.description || !date || !isCategory(data.category)) {
+  if (!data.title || !data.slug || !date || !isCategory(data.category)) {
     return null;
   }
+
+  const content = data.content ?? "";
 
   return {
     slug: data.slug,
     title: data.title,
-    description: String(data.description),
+    description: String(data.description ?? ""),
     date,
     updated: data.updated ? toDateString(data.updated) : undefined,
     category: data.category,
@@ -80,9 +72,14 @@ export function toPost(data: CmsPost): Post | null {
     draft: Boolean(data.draft),
     faq: Array.isArray(data.faq) ? data.faq : [],
     cover: data.cover,
-    content: data.content,
-    readingTime: readingTime(data.content).text,
-    headings: getHeadings(data.content),
+    author: data.author,
+    seoTitle: data.seoTitle,
+    seoDescription: data.seoDescription,
+    canonicalUrl: data.canonicalUrl,
+    sections: data.sections,
+    content,
+    readingTime: readingTime(content).text,
+    headings: extractHeadings(content),
   };
 }
 
@@ -102,6 +99,10 @@ function parsePost(filename: string): Post | null {
     draft: Boolean(data.draft),
     faq: Array.isArray(data.faq) ? data.faq : [],
     cover: data.cover,
+    author: data.author,
+    seoTitle: data.seoTitle,
+    seoDescription: data.seoDescription,
+    canonicalUrl: data.canonicalUrl,
     content,
   });
 }

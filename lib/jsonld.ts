@@ -100,24 +100,26 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
 export function articleJsonLd(post: Post) {
   const category = getCategory(post.category);
   const image = post.cover || absoluteUrl("/opengraph-image");
+  const url = post.canonicalUrl || absoluteUrl(`/blog/${post.slug}`);
+  const author = post.author || site.name;
 
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": absoluteUrl(`/blog/${post.slug}#article`),
-    headline: post.title,
-    description: post.description,
+    "@id": `${url}#article`,
+    headline: post.seoTitle || post.title,
+    description: post.seoDescription || post.description,
     image: [image],
     thumbnailUrl: image,
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
     inLanguage: site.language,
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
-    url: absoluteUrl(`/blog/${post.slug}`),
+    mainEntityOfPage: url,
+    url,
     author: {
       "@type": "Person",
       "@id": absoluteUrl("/#person"),
-      name: site.name,
+      name: author,
       url: site.url,
     },
     publisher: {

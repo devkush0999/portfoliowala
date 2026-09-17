@@ -41,7 +41,7 @@ function postRow(post: CmsPost) {
   return {
     slug: post.slug,
     title: post.title,
-    description: post.description,
+    description: post.description ?? "",
     date: post.date,
     updated: post.updated ?? null,
     category: post.category,
@@ -49,8 +49,13 @@ function postRow(post: CmsPost) {
     featured: Boolean(post.featured),
     draft: Boolean(post.draft),
     faq: post.faq ?? [],
-    content: post.content,
+    content: post.content ?? "",
     cover: post.cover || null,
+    author: post.author || null,
+    seoTitle: post.seoTitle || null,
+    seoDescription: post.seoDescription || null,
+    canonicalUrl: post.canonicalUrl || null,
+    sections: post.sections ?? [],
   };
 }
 
@@ -68,6 +73,11 @@ function fromPostRow(row: typeof postsTable.$inferSelect): CmsPost {
     faq: row.faq ?? [],
     content: row.content,
     cover: row.cover ?? undefined,
+    author: row.author ?? undefined,
+    seoTitle: row.seoTitle ?? undefined,
+    seoDescription: row.seoDescription ?? undefined,
+    canonicalUrl: row.canonicalUrl ?? undefined,
+    sections: row.sections ?? [],
   };
 }
 
@@ -123,6 +133,11 @@ export async function upsertPost(slug: string, post: CmsPost) {
           faq: row.faq,
           content: row.content,
           cover: row.cover,
+          author: row.author,
+          seoTitle: row.seoTitle,
+          seoDescription: row.seoDescription,
+          canonicalUrl: row.canonicalUrl,
+          sections: row.sections,
         },
       });
   });

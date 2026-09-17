@@ -1,4 +1,5 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import type { CmsSection } from "@/lib/cms/sections";
 import type { FaqItem } from "@/lib/posts";
 
 export const posts = sqliteTable("cms_posts", {
@@ -14,6 +15,11 @@ export const posts = sqliteTable("cms_posts", {
   faq: text("faq", { mode: "json" }).$type<FaqItem[]>().notNull().default([]),
   content: text("content").notNull(),
   cover: text("cover"),
+  author: text("author"),
+  seoTitle: text("seo_title"),
+  seoDescription: text("seo_description"),
+  canonicalUrl: text("canonical_url"),
+  sections: text("sections", { mode: "json" }).$type<CmsSection[]>().notNull().default([]),
 });
 
 export const projects = sqliteTable("cms_projects", {

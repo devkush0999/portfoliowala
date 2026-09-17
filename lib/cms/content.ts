@@ -11,6 +11,10 @@ import {
 } from "@/lib/cms/seed";
 import type { CmsPost } from "@/lib/cms/types";
 import {
+  compileSections,
+  sectionsFromContent,
+} from "@/lib/cms/sections";
+import {
   getLocalPosts,
   getPostFrom,
   getPostsByCategoryFrom,
@@ -18,8 +22,7 @@ import {
   toPost,
   type Post,
 } from "@/lib/posts";
-import type { CategorySlug } from "@/lib/site";
-import { topicClusters } from "@/lib/site";
+import { site, topicClusters, type CategorySlug } from "@/lib/site";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 
 export async function getCmsPosts() {
@@ -30,7 +33,7 @@ export async function getCmsPosts() {
   }
 }
 
-export async function getAllPosts(): Promise<Post[]> {
+async function getMergedPosts(): Promise<Post[]> {
   const local = getLocalPosts();
   const remote = await getCmsPosts();
   const bySlug = new Map<string, Post>();
@@ -45,9 +48,18 @@ export async function getAllPosts(): Promise<Post[]> {
     }
   }
 
-  return [...bySlug.values()]
-    .filter((post) => !(post.draft && process.env.NODE_ENV === "production"))
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+  return [...bySlug.values()].sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+export async function getAdminPosts(): Promise<Post[]> {
+  return getMergedPosts();
+}
+
+export async function getAllPosts(): Promise<Post[]> {
+  const posts = await getMergedPosts();
+  return posts.filter(
+    (post) => !(post.draft && process.env.NODE_ENV === "production"),
+  );
 }
 
 export async function getPost(slug: string) {
@@ -95,6 +107,37 @@ export const getAllEducation = unstable_cache(
   { tags: ["cms-education"] },
 );
 
+export function prepareCmsPost(body: CmsPost): CmsPost {
+  const sections =
+    Array.isArray(body.sections) && body.sections.length > 0
+      ? body.sections
+      : sectionsFromContent(body.content ?? "");
+  const compiled = compileSections(sections);
+  const faq = (body.faq ?? []).filter(
+    (item) => item.question?.trim() && item.answer?.trim(),
+  );
+
+  return {
+    slug: body.slug,
+    title: body.title,
+    description: body.description ?? "",
+    date: body.date,
+    updated: body.updated,
+    category: body.category,
+    tags: body.tags ?? [],
+    featured: Boolean(body.featured),
+    draft: Boolean(body.draft),
+    faq,
+    content: compiled || body.content || "",
+    cover: body.cover,
+    author: body.author,
+    seoTitle: body.seoTitle,
+    seoDescription: body.seoDescription,
+    canonicalUrl: body.canonicalUrl,
+    sections,
+  };
+}
+
 export function asCmsPost(post: Post): CmsPost {
   return {
     slug: post.slug,
@@ -109,6 +152,11 @@ export function asCmsPost(post: Post): CmsPost {
     faq: post.faq,
     content: post.content,
     cover: post.cover,
+    author: post.author || site.name,
+    seoTitle: post.seoTitle,
+    seoDescription: post.seoDescription,
+    canonicalUrl: post.canonicalUrl,
+    sections: sectionsFromContent(post.content, post.sections),
   };
 }
 

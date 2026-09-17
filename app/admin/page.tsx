@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Container } from "@/components/ui";
-import { getAllPosts, getAllProjects } from "@/lib/cms/content";
+import { getAdminPosts, getAllProjects } from "@/lib/cms/content";
 
 export default async function AdminHomePage() {
   const [posts, projects] = await Promise.all([
-    getAllPosts(),
+    getAdminPosts(),
     getAllProjects(),
   ]);
 

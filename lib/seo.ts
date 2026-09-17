@@ -69,27 +69,31 @@ export function pageMetadata({
 }
 
 export function postMetadata(post: Post): Metadata {
-  const url = absoluteUrl(`/blog/${post.slug}`);
+  const pathUrl = absoluteUrl(`/blog/${post.slug}`);
+  const url = post.canonicalUrl || pathUrl;
   const published = new Date(`${post.date}T00:00:00`).toISOString();
   const modified = new Date(
     `${post.updated ?? post.date}T00:00:00`,
   ).toISOString();
   const category = getCategory(post.category);
+  const title = post.seoTitle || post.title;
+  const description = post.seoDescription || post.description;
   const image = post.cover
     ? { url: post.cover, alt: post.title }
     : defaultImage;
+  const author = post.author || site.name;
 
   return {
-    title: post.title,
-    description: post.description,
+    title,
+    description,
     keywords: [
       post.title,
       category?.label ?? post.category,
       ...post.tags,
       ...site.keywords,
     ],
-    authors: [{ name: site.name, url: site.url }],
-    creator: site.name,
+    authors: [{ name: author, url: site.url }],
+    creator: author,
     publisher: site.name,
     category: category?.label ?? post.category,
     robots: {
@@ -110,23 +114,23 @@ export function postMetadata(post: Post): Metadata {
       },
     },
     openGraph: {
-      title: post.title,
-      description: post.description,
+      title,
+      description,
       url,
       siteName: site.name,
       locale: site.locale,
       type: "article",
       publishedTime: published,
       modifiedTime: modified,
-      authors: [site.name],
+      authors: [author],
       tags: post.tags,
       section: category?.label ?? post.category,
       images: [image],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.description,
+      title,
+      description,
       images: [image.url],
     },
   };

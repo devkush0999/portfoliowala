@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Container } from "@/components/ui";
-import { getAllPosts } from "@/lib/cms/content";
+import { getAdminPosts } from "@/lib/cms/content";
 
 export default async function AdminPostsPage() {
-  const posts = await getAllPosts();
+  const posts = await getAdminPosts();
 
   return (
     <Container className="py-16">

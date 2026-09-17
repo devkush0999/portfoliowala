@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui";
 import { PostEditor } from "@/components/admin/PostEditor";
-import { asCmsPost, getAllPosts } from "@/lib/cms/content";
+import { asCmsPost, getAdminPosts } from "@/lib/cms/content";
 
 export default async function EditPostPage({
   params,
@@ -9,7 +9,7 @@ export default async function EditPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const posts = await getAllPosts();
+  const posts = await getAdminPosts();
   const post = posts.find((item) => item.slug === slug);
   if (!post) {
     notFound();

@@ -13,6 +13,12 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  h4: (props: ComponentPropsWithoutRef<"h4">) => (
+    <h4
+      className="mt-8 scroll-mt-28 font-display text-lg tracking-tight text-ink sm:text-xl"
+      {...props}
+    />
+  ),
   img: (props: ComponentPropsWithoutRef<"img">) => (
     <img className="mt-6 w-full rounded-md border border-line" {...props} />
   ),

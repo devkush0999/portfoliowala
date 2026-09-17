@@ -1,7 +1,7 @@
 export function TableOfContents({
   headings,
 }: {
-  headings: { id: string; text: string }[];
+  headings: { id: string; text: string; level?: 2 | 3 | 4 }[];
 }) {
   if (headings.length === 0) {
     return null;
@@ -15,7 +15,13 @@ export function TableOfContents({
           <a
             key={heading.id}
             href={`#${heading.id}`}
-            className="text-ink transition hover:text-accent"
+            className={`text-ink transition hover:text-accent ${
+              heading.level === 3
+                ? "pl-3"
+                : heading.level === 4
+                  ? "pl-6"
+                  : ""
+            }`}
           >
             {heading.text}
           </a>
